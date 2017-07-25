@@ -62,6 +62,21 @@
         state: present
       when: t3bs.install_nodejs == "yes"
 
+    - name: Download MailHog
+      become: yes
+      get_url:
+        url: https://github.com/mailhog/MailHog/releases/download/{{ t3bs.mailhog_version }}/MailHog_linux_amd64
+        dest: /tmp/MailHog_linux_amd64_{{ t3bs.mailhog_version }}
+
+    - name: Install MailHog
+      become: yes
+      copy:
+        remote_src: true
+        src: /tmp/MailHog_linux_amd64_{{ t3bs.mailhog_version }}
+        dest: /usr/local/bin/mailhog
+        mode: 0755
+        force: yes
+
     - name: Update php settings (apache2)
       become: yes
       ini_file:

@@ -158,6 +158,11 @@ php_ini_cli:
 install_nodejs: "yes"
 
 #
+# MailHog version
+#
+mailhog_version: v1.0.0
+
+#
 # OS software requirements
 #
 # Do not remove any of the default packages.
@@ -170,6 +175,7 @@ requirements:
   - apache2
   - ghostscript
   - git
+  - golang-go
   - graphicsmagick
   - libapache2-mod-php7.0
   - mariadb-server
