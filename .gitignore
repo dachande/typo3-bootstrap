@@ -1,0 +1,16 @@
+.DS_Store
+.idea
+.vagrant
+provision/playbook.retry
+site/html
+LocalConfiguration.php
+PackageStates.php
+site/**/typo3conf/ext/
+site/**/typo3conf/l10n/
+typo3temp
+
+# All extensions in typo3conf/ext are ignored by default
+# as they are managed by composer and should not be in VCS.
+# If you develop custom extension you need to un-ignore
+# them here:
+# e.g. !site/**/typo3conf/ext/rw_foobar/

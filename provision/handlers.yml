@@ -1,0 +1,14 @@
+---
+- name: restart apache
+  become: yes
+  service: name=apache2 state=restarted
+
+- name: restart mysql
+  become: yes
+  service: name=mysql state=restarted
+
+- name: flush privileges
+  become: yes
+  command: 'mysql -ne "{{ item }}"'
+  with_items:
+    - FLUSH PRIVILEGES

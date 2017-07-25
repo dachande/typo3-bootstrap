@@ -1,0 +1,15 @@
+<VirtualHost *:80>
+    ServerAdmin {{ t3bs.server_admin }}
+    ServerName {{ t3bs.hostname }}
+
+    DocumentRoot {{ t3bs.document_root}}/{{ t3bs.project_folder }}/web
+
+    ErrorLog /var/log/apache2/typo3-error.log
+    CustomLog /var/log/apache2/typo3-access.log combined
+
+    <Directory "{{ t3bs.document_root}}/{{ t3bs.project_folder }}/web">
+        Options FollowSymLinks
+        AllowOverride All
+        Require all granted
+    </Directory>
+</VirtualHost>

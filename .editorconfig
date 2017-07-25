@@ -1,0 +1,44 @@
+# EditorConfig is awesome: http://EditorConfig.org
+
+# top-most EditorConfig file
+root = true
+
+# Unix-style newlines with a newline ending every file
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 2
+
+# PHP-Files
+[*.php]
+indent_size = 4
+
+# JSON-Files
+[*.json]
+indent_style = tab
+indent_size = 2
+
+# JSON-Files
+[composer.lock]
+indent_size = 4
+
+# ReST-Files
+[*.rst]
+indent_size = 3
+
+# MD-Files
+[*.md]
+trim_trailing_whitespace = false
+indent_size = 4
+
+# XLF-Files
+[*.{xlf,xml}]
+indent_style = tab
+indent_size = 4
+
+# TypoScript
+[*.{ts,typoscript,txt}]
+indent_size = 4
