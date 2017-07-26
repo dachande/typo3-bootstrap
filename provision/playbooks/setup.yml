@@ -62,6 +62,13 @@
         state: present
       when: t3bs.install_nodejs == "yes"
 
+    - name: Create MailHog directory
+      become: yes
+      file:
+        path: "{{ t3bs.mailhog_folder }}"
+        state: directory
+        mode: 0755
+
     - name: Download MailHog
       become: yes
       get_url:
@@ -73,9 +80,34 @@
       copy:
         remote_src: true
         src: /tmp/MailHog_linux_amd64_{{ t3bs.mailhog_version }}
-        dest: /usr/local/bin/mailhog
+        dest: "{{ t3bs.mailhog_folder }}/mailhog"
         mode: 0755
         force: yes
+
+    - name: Generate MailHog authentication
+      shell: "{{ t3bs.mailhog_folder }}/mailhog bcrypt {{ t3bs.mailhog_auth_pass }}"
+      register: mailhog_auth
+
+    - name: Store MailHog authentication
+      become: yes
+      copy:
+        content: "{{ t3bs.mailhog_auth_user }}:{{ mailhog_auth.stdout }}"
+        dest: "{{ t3bs.mailhog_folder }}/auth"
+        mode: 0644
+
+    - name: Create MailHog init script
+      become: yes
+      template:
+        src: ../templates/init.d.mailhog.sh.j2
+        dest: /etc/init.d/mailhog
+        mode: 0755
+
+    - name: Register MailHog service
+      become: yes
+      service:
+        name: mailhog
+        enabled: yes
+        state: started
 
     - name: Update php settings (apache2)
       become: yes
