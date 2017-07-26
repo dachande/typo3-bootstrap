@@ -54,33 +54,33 @@ db_pass: typo3
 #
 # TYPO3 core extensions to be enabled.
 #
-typo3_extensions:
-  - about
-  - belog
-  - beuser
-  - fluid_styled_content
-  - form
-  - impexp
-  - info
-  - info_pagetsconfig
-  - lowlevel
-  - recycler
-  - reports
-  - rsaauth
-  - rte_ckeditor
-  - setup
-  - t3editor
-  - tstemplate
+typo3_extensions: []
+  # - about
+  # - belog
+  # - beuser
+  # - fluid_styled_content
+  # - form
+  # - impexp
+  # - info
+  # - info_pagetsconfig
+  # - lowlevel
+  # - recycler
+  # - reports
+  # - rsaauth
+  # - rte_ckeditor
+  # - setup
+  # - t3editor
+  # - tstemplate
 
 #
 # TYPO3 community extensions to be installed/enabled
 #
-typo3_community_extensions:
-  - {composer_package: dmitryd/typo3-realurl, extension_key: realurl, constraint: ~}
-  - {composer_package: in2code/powermail, extension_key: powermail, constraint: ~}
-  - {composer_package: arminvieweg/dce, extension_key: dce, constraint: ~}
-  - {composer_package: georgringer/news, extension_key: news, constraint: ~}
-  - {composer_package: fluidtypo3/vhs, extension_key: vhs, constraint: ~}
+typo3_community_extensions: []
+  # - {composer_package: dmitryd/typo3-realurl, extension_key: realurl, constraint: ~}
+  # - {composer_package: in2code/powermail, extension_key: powermail, constraint: ~}
+  # - {composer_package: arminvieweg/dce, extension_key: dce, constraint: ~}
+  # - {composer_package: georgringer/news, extension_key: news, constraint: ~}
+  # - {composer_package: fluidtypo3/vhs, extension_key: vhs, constraint: ~}
 #  - {composer_package: typo3-ter/sr-feuser-register, extension_key: sr_feuser_register, constraint: ~}
 #  - {composer_package: b13/environment, extension_key: environment, constraint: ~}
 #  - {composer_package: b13/seo_basics, extension_key: seo_basics, constraint: ~}
@@ -187,18 +187,18 @@ requirements:
   - git
   - golang-go
   - graphicsmagick
-  - libapache2-mod-php7.0
+  - libapache2-mod-php7.1
   - mariadb-server
-  - php7.0
-  - php7.0-curl
-  - php7.0-gd
-  - php7.0-intl
-  - php7.0-mbstring
-  - php7.0-mcrypt
-  - php7.0-mysql
-  - php7.0-soap
-  - php7.0-xml
-  - php7.0-zip
+  - php7.1
+  - php7.1-curl
+  - php7.1-gd
+  - php7.1-intl
+  - php7.1-mbstring
+  - php7.1-mcrypt
+  - php7.1-mysql
+  - php7.1-soap
+  - php7.1-xml
+  - php7.1-zip
   - phpmyadmin
   - pwgen
   - unzip

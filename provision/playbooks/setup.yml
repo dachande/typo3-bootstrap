@@ -37,6 +37,11 @@
       apt:
          autoremove: yes
 
+    - name: Add PHP 7.1 PPA
+      become: yes
+      apt_repository:
+        repo: 'ppa:ondrej/php'
+
     - name: Install required packages
       become: yes
       apt: name={{ item }} state=present
