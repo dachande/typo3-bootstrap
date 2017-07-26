@@ -2,13 +2,24 @@
 
 Fully automated provisioning of a virtual machine for TYPO3 website development using **VirtualBox**, **Vagrant** and **Ansible**.
 
-The current TYPO3 version that will be provisioned is **8.7.x**
+## Contents
+
+The provisioned virtual machine will have the following packages installed:
+
+* TYPO3 8.7
+* Apache 2.4
+* MariaDB 10.0
+* PHP 7.1
+* GraphicsMagick 1.3
+* MailHog 1.0.0
+* PhpMyAdmin 4.5.4
+
 ## Requirements
 
+* A Linux or MacOS machine (not tested on Windows)
 * Oracle VirtualBox
 * Vagrant 1.8.6+
 * Ansible
-* A Linux or MacOS machine (not tested on Windows)
 
 ## Optional dependencies
 
@@ -48,7 +59,6 @@ If you can't access the virtual machine through its default IP address and/or ho
 
 ## Planned features
 
-* **PHP 7.1** using the [ondrej/php](https://launchpad.net/~ondrej/+archive/ubuntu/php) PPA.
 * Implement **MailHog** as a systemd service instead of using SysVinit.
 * Switch webserver user from *www-data* to *vagrant* for easier work inside the virtual machine.
 * Re-Provision without clearing the database.
