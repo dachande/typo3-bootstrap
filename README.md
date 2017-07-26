@@ -2,13 +2,24 @@
 
 Fully automated provisioning of a virtual machine for TYPO3 website development using **VirtualBox**, **Vagrant** and **Ansible**.
 
-The current TYPO3 version that will be provisioned is **8.7.x**
+## Contents
+
+The provisioned virtual machine will have the following packages installed:
+
+* TYPO3 8.7
+* Apache 2.4
+* MariaDB 10.0
+* PHP 7.0
+* GraphicsMagick 1.3
+* MailHog 1.0.0
+* PhpMyAdmin 4.5.4
+
 ## Requirements
 
+* A Linux or MacOS machine (not tested on Windows)
 * Oracle VirtualBox
 * Vagrant 1.8.6+
 * Ansible
-* A Linux or MacOS machine (not tested on Windows)
 
 ## Optional dependencies
 
