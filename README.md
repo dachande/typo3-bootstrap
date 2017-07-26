@@ -30,11 +30,17 @@ Only a few steps are necessary to get your virtual machine up and running:
 
 ## How do I get onto the box?
 
+### TYPO3
+
 After the box has been successfully booted up you can access TYPO3 by pointing your browser to http://192.168.101.100/typo3 (default IP address of your virtual machine).
 
 If you have installed the `vagrant-hostmanager` plug-in you can alternatively access the TYPO3 instance through its hostname http://typo3-bootstrap.dev.
 
 If you can't access the virtual machine through its default IP address and/or hostname chances are you have modified these information in the provisioning configuration.
+
+### MailHog
+
+[MailHog](https://github.com/mailhog/MailHog) is an email testing tool for developers and is automatically installed on the virtual machine. To access the Web-UI just visit http://192.168.101.100:8025 or http://typo3-bootstrap.dev:8025 and enter the username and password that have been set in the provisioning configuration.
 
 ## Current limitations
 
@@ -42,8 +48,8 @@ If you can't access the virtual machine through its default IP address and/or ho
 
 ## Planned features
 
-* **MailHog** as a simple SMTP Server for testing email delivery.
 * **PHP 7.1** using the [ondrej/php](https://launchpad.net/~ondrej/+archive/ubuntu/php) PPA.
+* Implement **MailHog** as a systemd service instead of using SysVinit.
 * Switch webserver user from *www-data* to *vagrant* for easier work inside the virtual machine.
 * Re-Provision without clearing the database.
 * **TYPO3 Surf** for automated deployments.

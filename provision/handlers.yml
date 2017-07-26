@@ -7,6 +7,10 @@
   become: yes
   service: name=mysql state=restarted
 
+- name: restart mailhog
+  become: yes
+  service: name=mailhog state=restarted
+
 - name: flush privileges
   become: yes
   command: 'mysql -ne "{{ item }}"'

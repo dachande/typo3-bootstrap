@@ -146,16 +146,31 @@ php_ini:
   - {section: PHP, option: post_max_size, value: 16M}
   - {section: PHP, option: upload_max_filesize, value: 16M}
   - {section: Date, option: date.timezone, value: Europe/Berlin}
+  - {section: mail function, option: sendmail_path, value: "/usr/sbin/sendmail -S localhost:1025"}
 
 php_ini_cli:
   - {section: PHP, option: max_input_vars, value: 1500}
   - {section: PHP, option: display_errors, value: On}
   - {section: Date, option: date.timezone, value: Europe/Berlin}
+  - {section: mail function, option: sendmail_path, value: "/usr/sbin/sendmail -S localhost:1025"}
 
 #
 # Install nodejs
 #
 install_nodejs: "yes"
+
+#
+# MailHog configuration
+#
+# If you change the mailhog_smtp setting make sure to update the php_ini (sendmail_path) settings above as well.
+#
+mailhog_version: v1.0.0
+
+mailhog_http: "0.0.0.0:8025"
+mailhog_smtp: "0.0.0.0:1025"
+
+mailhog_auth_user: mailhog
+mailhog_auth_pass: changeme
 
 #
 # OS software requirements
@@ -170,6 +185,7 @@ requirements:
   - apache2
   - ghostscript
   - git
+  - golang-go
   - graphicsmagick
   - libapache2-mod-php7.0
   - mariadb-server
@@ -202,3 +218,4 @@ document_root: /var/www
 www_user: www-data
 www_group: www-data
 www_user_home: /home/www-data
+mailhog_folder: /opt/mailhog
