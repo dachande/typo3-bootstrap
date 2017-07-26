@@ -117,7 +117,7 @@
     - name: Update php settings (apache2)
       become: yes
       ini_file:
-        path: /etc/php/7.0/apache2/php.ini
+        path: /etc/php/7.1/apache2/php.ini
         section: "{{ item.section }}"
         option: "{{ item.option }}"
         value: "{{ item.value }}"
@@ -127,7 +127,7 @@
     - name: Update php settings (cli)
       become: yes
       ini_file:
-        path: /etc/php/7.0/cli/php.ini
+        path: /etc/php/7.1/cli/php.ini
         section: "{{ item.section }}"
         option: "{{ item.option }}"
         value: "{{ item.value }}"
