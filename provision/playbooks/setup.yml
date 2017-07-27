@@ -114,6 +114,19 @@
         enabled: yes
         state: started
 
+    - name: Download MailHog sendmail replacement
+      become: yes
+      shell: GOPATH=/tmp/go go get github.com/mailhog/mhsendmail
+
+    - name: Install MailHog sendmail replacement
+      become: yes
+      copy:
+        remote_src: true
+        src: /tmp/go/bin/mhsendmail
+        dest: "{{ t3bs.mailhog_folder }}/mhsendmail"
+        mode: 0755
+        force: yes
+
     - name: Update php settings (apache2)
       become: yes
       ini_file:
@@ -348,6 +361,25 @@
       args:
         chdir: "{{ t3bs.document_root}}/{{ t3bs.project_folder}}"
       with_indexed_items: "{{ t3bs.typo3_languages }}"
+
+    - name: Set up mail transport (sendmail)
+      become: yes
+      become_user: "{{ t3bs.www_user }}"
+      shell: vendor/bin/typo3cms configuration:set --path MAIL/{{ item.key }} --value '{{ item.value }}'
+      args:
+        chdir: "{{ t3bs.document_root}}/{{ t3bs.project_folder}}"
+      with_items:
+        - {key: transport, value: sendmail}
+        - {key: transport_sendmail_command, value: /usr/sbin/sendmail -bs}
+      when: t3bs.typo3_mail_transport == "sendmail"
+
+    - name: Use mailhog for sendmail transport
+      become: yes
+      become_user: "{{ t3bs.www_user }}"
+      shell: vendor/bin/typo3cms configuration:set --path MAIL/transport_sendmail_command --value '{{ t3bs.mailhog_folder }}/mhsendmail -t --smtp-addr {{ t3bs.mailhog_smtp }}'
+      args:
+        chdir: "{{ t3bs.document_root}}/{{ t3bs.project_folder}}"
+      when: t3bs.typo3_mail_use_mailhog == true
 
     - name: Update apache vhost configuration
       become: yes
