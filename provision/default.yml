@@ -92,6 +92,14 @@ typo3_community_extensions:
 #  - {composer_package; friendsoftypo3/extension-builder, extension_key: extension_builder, constraint: 8.7.x-dev}
 
 #
+# TYPO3 Mail configuration
+#
+# TODO: Add description
+#
+typo3_mail_transport: sendmail
+typo3_mail_use_mailhog: true
+
+#
 # Translations
 #
 typo3_translations:
@@ -146,13 +154,11 @@ php_ini:
   - {section: PHP, option: post_max_size, value: 16M}
   - {section: PHP, option: upload_max_filesize, value: 16M}
   - {section: Date, option: date.timezone, value: Europe/Berlin}
-  - {section: mail function, option: sendmail_path, value: "/usr/sbin/sendmail -S localhost:1025"}
 
 php_ini_cli:
   - {section: PHP, option: max_input_vars, value: 1500}
   - {section: PHP, option: display_errors, value: On}
   - {section: Date, option: date.timezone, value: Europe/Berlin}
-  - {section: mail function, option: sendmail_path, value: "/usr/sbin/sendmail -S localhost:1025"}
 
 #
 # Install nodejs
