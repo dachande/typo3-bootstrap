@@ -94,7 +94,9 @@ typo3_community_extensions:
 #
 # TYPO3 Mail configuration
 #
-# TODO: Add description
+# Currently only 'sendmail' mail transport option is supported.
+# If typo3_mail_use_mailhog is set, mails will be send to MailHog
+# using the mhsendmail wrapper. Otherwise default sendmail is used.
 #
 typo3_mail_transport: sendmail
 typo3_mail_use_mailhog: true
