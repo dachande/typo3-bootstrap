@@ -32,8 +32,10 @@ Vagrant.configure(2) do |config|
   config.vm.synced_folder _conf['synced_folder'],
       _conf['document_root'], :create => "true", :owner => _conf['www_user'], :group => _conf['www_group']
 
-  if Vagrant.has_plugin?('vagrant-hostsupdater')
-    config.hostsupdater.remove_on_suspend = true
+  if Vagrant.has_plugin?('vagrant-hostmanager')
+    config.hostmanager.enabled = true
+    config.hostmanager.manage_host = true
+    config.hostmanager.manage_guest = true
   end
 
   if Vagrant.has_plugin?('vagrant-vbguest')
