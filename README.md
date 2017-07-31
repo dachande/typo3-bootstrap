@@ -69,6 +69,12 @@ More information about MailHog can be found at [github.com/mailhog](https://gith
 * Implement **MailHog** as a systemd service instead of using SysVinit.
 * **TYPO3 Surf** for automated deployments.
 
+## What about TYPO3 7.6?
+
+It should also be possible to provision TYPO3 7.6 with this package but its not fully tested yet so there is no 100% guarantee that it will work. Please bear that in mind if you try to provision any TYPO3 version below 8.7.
+
+Please check the comments in the provisioning configuration for additional information on how to set up this package to provision TYPO3 7.6.
+
 ## Credits
 
-* The provisioning workflow is loosely based on the provisioning workflow used in the [VCCW](https://github.com/vccw-team/vccw) project.
+The provisioning workflow is loosely based on the provisioning workflow used in the [VCCW](https://github.com/vccw-team/vccw) project.

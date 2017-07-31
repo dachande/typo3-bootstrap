@@ -27,7 +27,18 @@ ip: 192.168.101.100
 #
 # TYPO3 Settings
 #
+# Installing other versions than 8.7 is not fully tested and
+# can fail at any time!
+#
+# If you want to install TYPO3 7.6 set typo3_version to 7.6.10
+# This will install the latest version of the 7.6.x branch.
+# In this case please make sure to add helhum/typo3-console in the
+# composer_packages setting below.
+# Please also make sure that non existent core TYPO3 extensions are
+# disabled (like rte_ckeditor).
+#
 typo3_version: 8.7
+#typo3_version: 7.6.10
 typo3_site_name: TYPO3 Bootstrap
 
 #
@@ -68,6 +79,7 @@ typo3_extensions:
   - reports
   - rsaauth
   - rte_ckeditor
+#  - rtehtmlarea
   - setup
   - t3editor
   - tstemplate
@@ -145,6 +157,15 @@ linked_clone: false
 composer:
   - {option: minimum-stability, value: dev}
   - {option: prefer-stable, value: 1}
+
+#
+# Additional composer packages to install
+#
+# Note: If you install a TYPO3 version below 8.7 you will need to add helhum/typo3-console
+# as it is not in the default requirements of the TYPO3 distribution package
+#
+composer_packages: []
+#  - {composer_package: helhum/typo3-console, constraint: ~}
 
 #
 # PHP settings

@@ -266,6 +266,15 @@
       register: nonfresh_install
       when: fresh_install.changed == false
 
+    - name: Install/Update additional composer packages
+      become: yes
+      become_user: "{{ t3bs.www_user }}"
+      shell: composer require {{ item.composer_package }} {{ item.constraint }}
+      args:
+        chdir: "{{ t3bs.document_root }}/{{ t3bs.project_folder }}"
+      with_items: "{{ t3bs.composer_packages }}"
+      when: fresh_install.changed == true
+
     - name: Install/Update TYPO3 community packages
       become: yes
       become_user: "{{ t3bs.www_user }}"
