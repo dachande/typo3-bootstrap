@@ -106,11 +106,30 @@ typo3_community_extensions:
 #
 # TYPO3 Mail configuration
 #
-# Currently only 'sendmail' mail transport option is supported.
-# If typo3_mail_use_mailhog is set, mails will be send to MailHog
-# using the mhsendmail wrapper. Otherwise default sendmail is used.
+# Supported options for typo3_mail_transport are 'sendmail' and 'smtp'.
+#
+# If transport is set to sendmail and typo3_mail_use_mailhog is set
+# mails will be send to MailHog using the mhsendmail wrapper.
+# Otherwise default sendmail is used.
+#
+# If transport is set to smtp please also set the additional smtp
+# configuration options specifying smtp server, encryption and login
+# credentials.
+# If an option is not needed (like username/password) do not comment out
+# that option. Instead set its value to ~ (tilde)
+#
+# For more information please have a look at the official TYPO3 Mail
+# API documentation
+#
+# https://docs.typo3.org/typo3cms/CoreApiReference/ApiOverview/Mail/Index.html
 #
 typo3_mail_transport: sendmail
+
+typo3_mail_smtp_server: localhost:1025
+typo3_mail_smtp_encrypt: ~
+typo3_mail_smtp_username: ~
+typo3_mail_smtp_password: ~
+
 typo3_mail_use_mailhog: true
 
 #

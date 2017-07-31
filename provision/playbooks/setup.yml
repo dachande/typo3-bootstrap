@@ -388,7 +388,23 @@
       shell: vendor/bin/typo3cms configuration:set --path MAIL/transport_sendmail_command --value '{{ t3bs.mailhog_folder }}/mhsendmail -t --smtp-addr {{ t3bs.mailhog_smtp }}'
       args:
         chdir: "{{ t3bs.document_root}}/{{ t3bs.project_folder}}"
-      when: t3bs.typo3_mail_use_mailhog == true
+      when:
+        - t3bs.typo3_mail_transport == "sendmail"
+        - t3bs.typo3_mail_use_mailhog == true
+
+    - name: Set up mail transport (smtp)
+      become: yes
+      become_user: "{{ t3bs.www_user }}"
+      shell: vendor/bin/typo3cms configuration:set --path MAIL/{{ item.key }} --value '{{ item.value }}'
+      args:
+        chdir: "{{ t3bs.document_root}}/{{ t3bs.project_folder}}"
+      with_items:
+        - {key: transport, value: smtp}
+        - {key: transport_smtp_server, value: "{{ t3bs.typo3_mail_smtp_server }}"}
+        - {key: transport_smtp_encrypt, value: "{{ t3bs.typo3_mail_smtp_encrypt }}"}
+        - {key: transport_smtp_username, value: "{{ t3bs.typo3_mail_smtp_username }}"}
+        - {key: transport_smtp_password, value: "{{ t3bs.typo3_mail_smtp_password }}"}
+      when: t3bs.typo3_mail_transport == "smtp"
 
     - name: Update apache vhost configuration
       become: yes

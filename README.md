@@ -51,9 +51,9 @@ If you can't access the virtual machine through its default IP address and/or ho
 
 ### MailHog
 
-[MailHog](https://github.com/mailhog/MailHog) is a virtual SMTP-server and email testing tool for developers and is automatically installed on the virtual machine. To access the Web-UI just visit http://192.168.101.100:8025 or http://typo3-bootstrap.dev:8025 and enter the username and password that have been set in the provisioning configuration.
+[MailHog](https://github.com/mailhog/MailHog) is a virtual SMTP server and email testing tool for developers and is automatically installed on the virtual machine. To access the Web-UI just visit http://192.168.101.100:8025 or http://typo3-bootstrap.dev:8025 and enter the username and password that have been set in the provisioning configuration.
 
-The default configuration will automatically send all emails to MailHog using the mhsendmail wrapper.
+The default configuration will automatically send all emails to MailHog using the mhsendmail wrapper. If you don't want to use MailHog but your own SMTP server instead, just update the corresponding settings in the provisioning configuration.
 
 More information about MailHog can be found at [github.com/mailhog](https://github.com/mailhog/MailHog)
 
@@ -63,7 +63,6 @@ More information about MailHog can be found at [github.com/mailhog](https://gith
 
 ## Planned features
 
-* Add SMTP mail transport configuration options to use MailHog SMTP as well as real SMTP-servers.
 * Switch webserver user from *www-data* to *vagrant* for easier work inside the virtual machine.
 * Re-Provision without clearing the database.
 * Implement **MailHog** as a systemd service instead of using SysVinit.
