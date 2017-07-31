@@ -1,12 +1,12 @@
 ---
 - hosts: all
+  become: yes
 
   handlers:
     - include: ../handlers.yml
 
   tasks:
     - name: Update OS packages
-      become: yes
       apt:
         name: "{{ item }}"
         update_cache: yes
@@ -16,12 +16,10 @@
         - python-mysqldb
 
     - name: Generate locales
-      become: yes
       command: locale-gen {{ item }}
       with_items: "{{ t3bs.system_locales }}"
 
     - name: Set default locale
-      become: yes
       replace:
         path: /etc/default/locale
         regexp: "{{ item.regexp }}"
@@ -33,34 +31,28 @@
           replace: "LANGUAGE={{ t3bs.default_locale.split('.')[0] }}:"
 
     - name: Remove old packages
-      become: yes
       apt:
          autoremove: yes
 
     - name: Add PHP 7.1 PPA
-      become: yes
       apt_repository:
         repo: 'ppa:ondrej/php'
 
     - name: Install required packages
-      become: yes
       apt: name={{ item }} state=present
       with_items: "{{ t3bs.requirements }}"
 
     - name: Download nodejs installer
-      become: yes
       get_url:
         url: https://deb.nodesource.com/setup_6.x
         dest: /tmp/nodejs-installer.sh
       when: t3bs.install_nodejs == "yes"
 
     - name: Execute nodejs installer
-      become: yes
       script: /tmp/nodejs-installer.sh
       when: t3bs.install_nodejs == "yes"
 
     - name: Install nodejs
-      become: yes
       apt:
         name: nodejs
         update_cache: yes
@@ -68,20 +60,17 @@
       when: t3bs.install_nodejs == "yes"
 
     - name: Create MailHog directory
-      become: yes
       file:
         path: "{{ t3bs.mailhog_folder }}"
         state: directory
         mode: 0755
 
     - name: Download MailHog
-      become: yes
       get_url:
         url: https://github.com/mailhog/MailHog/releases/download/{{ t3bs.mailhog_version }}/MailHog_linux_amd64
         dest: /tmp/MailHog_linux_amd64_{{ t3bs.mailhog_version }}
 
     - name: Install MailHog
-      become: yes
       copy:
         remote_src: true
         src: /tmp/MailHog_linux_amd64_{{ t3bs.mailhog_version }}
@@ -94,32 +83,27 @@
       register: mailhog_auth
 
     - name: Store MailHog authentication
-      become: yes
       copy:
         content: "{{ t3bs.mailhog_auth_user }}:{{ mailhog_auth.stdout }}"
         dest: "{{ t3bs.mailhog_folder }}/auth"
         mode: 0644
 
     - name: Create MailHog init script
-      become: yes
       template:
         src: ../templates/init.d.mailhog.sh.j2
         dest: /etc/init.d/mailhog
         mode: 0755
 
     - name: Register MailHog service
-      become: yes
       service:
         name: mailhog
         enabled: yes
         state: started
 
     - name: Download MailHog sendmail replacement
-      become: yes
       shell: GOPATH=/tmp/go go get github.com/mailhog/mhsendmail
 
     - name: Install MailHog sendmail replacement
-      become: yes
       copy:
         remote_src: true
         src: /tmp/go/bin/mhsendmail
@@ -128,7 +112,6 @@
         force: yes
 
     - name: Update php settings (apache2)
-      become: yes
       ini_file:
         path: /etc/php/7.1/apache2/php.ini
         section: "{{ item.section }}"
@@ -138,7 +121,6 @@
       with_items: "{{ t3bs.php_ini }}"
 
     - name: Update php settings (cli)
-      become: yes
       ini_file:
         path: /etc/php/7.1/cli/php.ini
         section: "{{ item.section }}"
@@ -148,7 +130,6 @@
       with_items: "{{ t3bs.php_ini_cli }}"
 
     - name: Download composer
-      become: yes
       get_url:
         url: https://getcomposer.org/installer
         dest: /tmp/composer-setup.php
@@ -156,35 +137,29 @@
         force: yes
 
     - name: Install composer
-      become: yes
       shell: "php /tmp/composer-setup.php --install-dir=/usr/local/bin --filename=composer"
       args:
         creates: /usr/local/bin/composer
 
     - name: Update composer
-      become: yes
       shell: "/usr/local/bin/composer --quiet self-update"
 
     - name: Create Webroot
-      become: yes
       file:
         path: "{{ t3bs.document_root }}"
         state: directory
         mode: 0755
 
     - name: Create www user home
-      become: yes
       file:
         path: "{{ t3bs.www_user_home }}"
         state: directory
         mode: 0755
 
     - name: Copy home directory skeleton
-      become: yes
       shell: rsync -rtq /etc/skel/ {{ t3bs.www_user_home }}
 
     - name: Fix home directory permissions
-      become: yes
       file:
         path: "{{ t3bs.www_user_home }}"
         state: directory
@@ -193,14 +168,12 @@
         recurse: yes
 
     - name: Enable login shell for www user
-      become: yes
       replace:
         path: /etc/passwd
         regexp: '{{ t3bs.www_user }}:x:([0-9]*):([0-9]*):([^:]*):.*'
         replace: '{{ t3bs.www_user }}:x:\1:\2:\3:{{ t3bs.www_user_home }}:/bin/bash'
 
     - name: Set random password for www user
-      become: yes
       shell: echo {{ t3bs.www_user }}:`pwgen -yB 16 1` | chpasswd
 
     - name: Create webroot symlink
@@ -218,13 +191,7 @@
       args:
         creates: "{{ t3bs.www_user_home }}/.ssh/id_rsa"
 
-    # - name: Check for existing project folder
-    #   stat:
-    #     path: "{{ t3bs.document_root }}/{{ t3bs.project_folder }}"
-    #   register: project_folder
-
     - name: Purge project folder
-      become: yes
       file:
         path: "{{ item }}"
         state: absent
@@ -235,7 +202,6 @@
       when: t3bs.purge_project_folder == "yes"
 
     - name: Purge typo3temp folder
-      become: yes
       file:
         path: "{{ t3bs.document_root }}/{{ t3bs.project_folder }}/web/typo3temp"
         state: absent
@@ -292,7 +258,6 @@
         chdir: "{{ t3bs.document_root }}/{{ t3bs.project_folder }}"
 
     - name: Set mysql root password
-      become: yes
       mysql_user: name=root host={{ item }} password={{ t3bs.db_root_password }} state=present
       with_items:
         - localhost
@@ -301,7 +266,6 @@
       notify: flush privileges
 
     - name: Secure mysql installation
-      become: yes
       command: 'mysql -ne "{{ item }}"'
       with_items:
         - DELETE FROM mysql.user WHERE User=''
@@ -311,20 +275,17 @@
       notify: flush privileges
 
     - name: Drop mysql database
-      become: yes
       mysql_db:
         name: "{{ t3bs.db_name }}"
         state: absent
       when: t3bs.reset_db_on_provision
 
     - name: Create mysql database
-      become: yes
       mysql_db:
         name: "{{ t3bs.db_name }}"
         state: present
 
     - name: Create mysql user
-      become: yes
       mysql_user:
         name: "{{ t3bs.db_user }}"
         password: "{{ t3bs.db_pass }}"
@@ -407,7 +368,6 @@
       when: t3bs.typo3_mail_transport == "smtp"
 
     - name: Update apache vhost configuration
-      become: yes
       template:
         src: ../templates/apache.conf.j2
         dest: /etc/apache2/sites-available/000-default.conf
@@ -415,13 +375,11 @@
       notify: restart apache
 
     - name: Enable apache modules
-      become: yes
       command: a2enmod {{ item }}
       with_items: "{{ t3bs.apache_modules }}"
       notify: restart apache
 
     - name: Remove default html folder
-      become: yes
       file:
         path: "{{ t3bs.document_root}}/html"
         state: absent
