@@ -161,7 +161,7 @@ default_locale: de_DE.UTF-8
 # DB will be reset when provision
 #
 # Setting this to 'false' is currently not supported as the
-# typocms install:setup command will fail if database already exists.
+# typo3cms install:setup command will fail if database already exists.
 #
 reset_db_on_provision: true
 
