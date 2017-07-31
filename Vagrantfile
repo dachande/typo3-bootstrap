@@ -71,7 +71,15 @@ Vagrant.configure(2) do |config|
   if File.exists?(File.join(File.dirname(__FILE__), 'provision/provision-post.sh')) then
     config.vm.provision :shell do |shell|
       shell.path = File.join( File.dirname(__FILE__), 'provision/provision-post.sh' )
-      shell.env = {'t3bs_typo3_version' => _conf['typo3_version'], 't3bs_hostname' => _conf['hostname'], 't3bs_ip' => _conf['ip'], 't3bs_typo3_admin_user' => _conf['typo3_admin_user'], 't3bs_typo3_admin_pass' => _conf['typo3_admin_pass']}
+      shell.env = {
+        't3bs_typo3_version' => _conf['typo3_version'],
+        't3bs_hostname' => _conf['hostname'],
+        't3bs_ip' => _conf['ip'],
+        't3bs_typo3_admin_user' => _conf['typo3_admin_user'],
+        't3bs_typo3_admin_pass' => _conf['typo3_admin_pass'],
+        't3bs_mailhog_auth_user' => _conf['mailhog_auth_user'],
+        't3bs_mailhog_auth_pass' => _conf['mailhog_auth_pass']
+      }
     end
   end
 end
