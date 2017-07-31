@@ -70,7 +70,7 @@ More information about MailHog can be found at [github.com/mailhog](https://gith
 
 ## What about TYPO3 7.6?
 
-It should also be possible to provision TYPO3 7.6 with this package but its not fully tested yet so there is no 100% guarantee that it will work. Please bear that in mind if you try to provision any TYPO3 version below 8.7.
+Although this packages is meant to provision TYPO3 8.7 it should also be possible provisioning an earlier TYPO3 version like 7.6. Please bear in mind that this feature has not yet been fully tested so there is no 100% guarantee that this will work.
 
 Please check the comments in the provisioning configuration for additional information on how to set up this package to provision TYPO3 7.6.
 
