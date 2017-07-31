@@ -13,6 +13,7 @@ The provisioned virtual machine will have the following packages installed:
 * GraphicsMagick 1.3
 * MailHog 1.0.0
 * PhpMyAdmin 4.5.4
+* NodeJS 6.x
 
 ## Requirements
 
