@@ -144,16 +144,26 @@
     - name: Update composer
       shell: "/usr/local/bin/composer --quiet self-update"
 
-    # - name: Set apache to run under different user/group
-    #   lineinfile:
-    #     dest: /etc/apache2/envvars"
-    #     regexp: "{{ item.regexp }}"
-    #     line: "{{ item.line }}"
-    #     state: present
-    #     with_items:
-    #       - { regexp: "^export APACHE_RUN_USER", line: "export APACHE_RUN_USER={{ t3bs.www_user }}"}
-    #       - { regexp: "^export APACHE_RUN_GROUP", line: "export APACHE_RUN_GROUP={{ t3bs.www_group }}"}
-    #     notify: restart apache
+    - name: Create user
+      user:
+        name: "{{ t3bs.www_user }}"
+        groups: "{{ t3bs.www_group }}"
+        shell: /bin/bash
+        home: /home/{{ t3bs.www_user }}
+        generate_ssh_key: yes
+        state: present
+
+
+    - name: Set apache to run under different user/group
+      lineinfile:
+        dest: /etc/apache2/envvars
+        regexp: "{{ item.regexp }}"
+        line: "{{ item.line }}"
+        state: present
+      with_items:
+        - { regexp: "^export APACHE_RUN_USER", line: "export APACHE_RUN_USER={{ t3bs.www_user }}"}
+        - { regexp: "^export APACHE_RUN_GROUP", line: "export APACHE_RUN_GROUP={{ t3bs.www_group }}"}
+      notify: restart apache
 
     - name: Create Webroot
       file:
