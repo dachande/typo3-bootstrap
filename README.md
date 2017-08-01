@@ -13,7 +13,7 @@ The provisioned virtual machine will have the following packages installed:
 * GraphicsMagick 1.3
 * MailHog 1.0.0
 * PhpMyAdmin 4.5.4
-* NodeJS 6.x
+* Node.js 6.x
 
 ## Requirements
 
@@ -32,7 +32,7 @@ The provisioned virtual machine will have the following packages installed:
 Only a few steps are necessary to get your virtual machine up and running:
 
 1. Download and install **VirtualBox**, **Vagrant** and **Ansible**.
-2. Install the **Vagrant plugins** (optional): In a terminal execute
+2. Install the **Vagrant plugins** (optional): In a terminal execute (as root or using sudo)
     - `vagrant plugin install vagrant-hostmanager`
     - `vagrant plugin install vagrant-vbguest`
 3. Clone this repository.
@@ -46,7 +46,7 @@ Only a few steps are necessary to get your virtual machine up and running:
 
 After the box has been successfully booted up you can access TYPO3 by pointing your browser to http://192.168.101.100/typo3 (default IP address of your virtual machine).
 
-If you have installed the `vagrant-hostmanager` plug-in you can alternatively access the TYPO3 instance through its hostname http://typo3-bootstrap.dev.
+If you have installed the `vagrant-hostmanager` plug-in you can alternatively access the TYPO3 instance through its hostname http://typo3-bootstrap.dev/typo3.
 
 If you can't access the virtual machine through its default IP address and/or hostname chances are you have modified these information in the provisioning configuration.
 
@@ -76,4 +76,5 @@ Please check the comments in the provisioning configuration for additional infor
 
 ## Credits
 
-The provisioning workflow is loosely based on the provisioning workflow used in the [VCCW](https://github.com/vccw-team/vccw) project.
+* The provisioning workflow is loosely based on the provisioning workflow used in the [VCCW](https://github.com/vccw-team/vccw) project.
+* Thanks to [Reizwerk GmbH](https://www.reizwerk.com) allowing me to use some of my work time for package development.
