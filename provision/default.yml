@@ -1,5 +1,7 @@
-# encoding: utf-8
-# vim: ft=ruby expandtab shiftwidth=2 tabstop=2
+# ##################################################################
+# TYPO3 Bootstrap Package
+# Provisioning Configuration
+# ##################################################################
 
 #
 # General Settings
@@ -263,7 +265,7 @@ apache_modules:
 #
 synced_folder: site
 document_root: /var/www
-www_user: www-data
+www_user: vagrant
 www_group: www-data
-www_user_home: /home/www-data
+www_user_home: /home/vagrant
 mailhog_folder: /opt/mailhog

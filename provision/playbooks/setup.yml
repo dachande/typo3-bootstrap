@@ -144,15 +144,19 @@
     - name: Update composer
       shell: "/usr/local/bin/composer --quiet self-update"
 
-    - name: Create user
+    - name: Create/Update www user
       user:
         name: "{{ t3bs.www_user }}"
         groups: "{{ t3bs.www_group }}"
+        append: yes
+        home: "{{ t3bs.www_user_home }}"
         shell: /bin/bash
-        home: /home/{{ t3bs.www_user }}
         generate_ssh_key: yes
         state: present
 
+    - name: Set random password for www user
+      shell: echo {{ t3bs.www_user }}:`pwgen -yB 16 1` | chpasswd
+      when: t3bs.www_user != "vagrant"
 
     - name: Set apache to run under different user/group
       lineinfile:
@@ -171,32 +175,6 @@
         state: directory
         mode: 0755
 
-    - name: Create www user home
-      file:
-        path: "{{ t3bs.www_user_home }}"
-        state: directory
-        mode: 0755
-
-    - name: Copy home directory skeleton
-      shell: rsync -rtq /etc/skel/ {{ t3bs.www_user_home }}
-
-    - name: Fix home directory permissions
-      file:
-        path: "{{ t3bs.www_user_home }}"
-        state: directory
-        owner: "{{ t3bs.www_user }}"
-        group: "{{ t3bs.www_group }}"
-        recurse: yes
-
-    - name: Enable login shell for www user
-      replace:
-        path: /etc/passwd
-        regexp: '{{ t3bs.www_user }}:x:([0-9]*):([0-9]*):([^:]*):.*'
-        replace: '{{ t3bs.www_user }}:x:\1:\2:\3:{{ t3bs.www_user_home }}:/bin/bash'
-
-    - name: Set random password for www user
-      shell: echo {{ t3bs.www_user }}:`pwgen -yB 16 1` | chpasswd
-
     - name: Create webroot symlink
       become: yes
       become_user: "{{ t3bs.www_user }}"
@@ -204,13 +182,6 @@
         src: "{{ t3bs.document_root }}"
         dest: "{{ t3bs.www_user_home }}/www"
         state: link
-
-    - name: Generate ssh key for www user
-      become: yes
-      become_user: "{{ t3bs.www_user }}"
-      shell: ssh-keygen -f {{ t3bs.www_user_home }}/.ssh/id_rsa -P ''
-      args:
-        creates: "{{ t3bs.www_user_home }}/.ssh/id_rsa"
 
     - name: Purge project folder
       file:

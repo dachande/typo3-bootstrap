@@ -64,7 +64,6 @@ More information about MailHog can be found at [github.com/mailhog](https://gith
 
 ## Planned features
 
-* Switch webserver user from *www-data* to *vagrant* for easier work inside the virtual machine.
 * Re-Provision without clearing the database.
 * Implement **MailHog** as a systemd service instead of using SysVinit.
 * **TYPO3 Surf** for automated deployments.
