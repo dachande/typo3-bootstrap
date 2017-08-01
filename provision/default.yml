@@ -91,19 +91,20 @@ typo3_extensions:
 #
 typo3_community_extensions:
   - {composer_package: dmitryd/typo3-realurl, extension_key: realurl, constraint: ~}
-  - {composer_package: in2code/powermail, extension_key: powermail, constraint: ~}
-  - {composer_package: arminvieweg/dce, extension_key: dce, constraint: ~}
-  - {composer_package: georgringer/news, extension_key: news, constraint: ~}
-  - {composer_package: fluidtypo3/vhs, extension_key: vhs, constraint: ~}
-#  - {composer_package: typo3-ter/sr-feuser-register, extension_key: sr_feuser_register, constraint: ~}
-#  - {composer_package: b13/environment, extension_key: environment, constraint: ~}
-#  - {composer_package: b13/seo_basics, extension_key: seo_basics, constraint: ~}
-#  - {composer_package: in2code/powermail_cond, extension_key: powermail_cond, constraint: ~}
-#  - {composer_package: rh/rh_recaptcha, extension_key: rh_recaptcha, constraint: ~}
-#  - {composer_package: gridelementsteam/gridelements, extension_key: gridelements, constraint: dev-master}
-#  - {composer_package: clickstorm/go_maps_ext, extension_key: go_maps_ext, constraint: ~}
-#  - {composer_package; namelesscoder/inline-page-editing, extension_key: inline_page_editing, constraint: dev-master}
-#  - {composer_package; friendsoftypo3/extension-builder, extension_key: extension_builder, constraint: 8.7.x-dev}
+  - {composer_package: typo3/cms-introduction, extension_key: introduction, constraint: ~}
+  # - {composer_package: in2code/powermail, extension_key: powermail, constraint: ~}
+  # - {composer_package: arminvieweg/dce, extension_key: dce, constraint: ~}
+  # - {composer_package: georgringer/news, extension_key: news, constraint: ~}
+  # - {composer_package: fluidtypo3/vhs, extension_key: vhs, constraint: ~}
+  # - {composer_package: typo3-ter/sr-feuser-register, extension_key: sr_feuser_register, constraint: ~}
+  # - {composer_package: b13/environment, extension_key: environment, constraint: ~}
+  # - {composer_package: b13/seo_basics, extension_key: seo_basics, constraint: ~}
+  # - {composer_package: in2code/powermail_cond, extension_key: powermail_cond, constraint: ~}
+  # - {composer_package: rh/rh_recaptcha, extension_key: rh_recaptcha, constraint: ~}
+  # - {composer_package: gridelementsteam/gridelements, extension_key: gridelements, constraint: dev-master}
+  # - {composer_package: clickstorm/go_maps_ext, extension_key: go_maps_ext, constraint: ~}
+  # - {composer_package; namelesscoder/inline-page-editing, extension_key: inline_page_editing, constraint: dev-master}
+  # - {composer_package; friendsoftypo3/extension-builder, extension_key: extension_builder, constraint: 8.7.x-dev}
 
 #
 # TYPO3 Mail configuration
