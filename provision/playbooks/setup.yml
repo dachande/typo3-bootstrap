@@ -292,6 +292,15 @@
       args:
         chdir: "{{ t3bs.document_root}}/{{ t3bs.project_folder}}"
 
+    - name: Install default htaccess
+      become: yes
+      become_user: "{{ t3bs.www_user }}"
+      copy:
+        remote_src: true
+        src: "{{ t3bs.document_root}}/{{ t3bs.project_folder }}/vendor/typo3/cms/_.htaccess"
+        dest: "{{ t3bs.document_root}}/{{ t3bs.project_folder }}/web/.htaccess"
+        mode: 0644
+
     - name: Activate TYPO3 core extensions
       become: yes
       become_user: "{{ t3bs.www_user }}"
