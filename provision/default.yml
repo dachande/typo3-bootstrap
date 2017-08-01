@@ -160,7 +160,7 @@ system_locales:
 default_locale: de_DE.UTF-8
 
 #
-# DB will be reset when provision
+# DB will be reset on provision
 #
 # Setting this to 'false' is currently not supported as the
 # typo3cms install:setup command will fail if database already exists.
@@ -212,8 +212,6 @@ install_nodejs: "yes"
 #
 # MailHog configuration
 #
-# If you change the mailhog_smtp setting make sure to update the php_ini (sendmail_path) settings above as well.
-#
 mailhog_version: v1.0.0
 
 mailhog_http: "0.0.0.0:8025"
@@ -223,7 +221,7 @@ mailhog_auth_user: mailhog
 mailhog_auth_pass: changeme
 
 #
-# OS software requirements
+# OS software package requirements
 #
 # Do not remove any of the default packages.
 #
@@ -261,7 +259,7 @@ apache_modules:
   - ssl
 
 #
-# Do not change unless you know what you are doing
+# Do not change these settings unless you know what you are doing
 #
 synced_folder: site
 document_root: /var/www
