@@ -1,0 +1,379 @@
+---
+- name: Update OS packages
+  apt:
+    name: "{{ item }}"
+    update_cache: yes
+    state: present
+  with_items:
+    - aptitude
+    - python-mysqldb
+
+- name: Generate locales
+  command: locale-gen {{ item }}
+  with_items: "{{ t3bs.system_locales }}"
+
+- name: Set default locale
+  replace:
+    path: /etc/default/locale
+    regexp: "{{ item.regexp }}"
+    replace: "{{ item.replace }}"
+  with_items:
+    - regexp: "^LANG=.*"
+      replace: "LANG={{ t3bs.default_locale }}"
+    - regexp: "^LANGUAGE=.*"
+      replace: "LANGUAGE={{ t3bs.default_locale.split('.')[0] }}:"
+
+- name: Remove old packages
+  apt:
+     autoremove: yes
+
+- name: Add PHP 7.1 PPA
+  apt_repository:
+    repo: 'ppa:ondrej/php'
+
+- name: Install required packages
+  apt: name={{ item }} state=present
+  with_items: "{{ t3bs.requirements }}"
+
+- name: Download nodejs installer
+  get_url:
+    url: https://deb.nodesource.com/setup_6.x
+    dest: /tmp/nodejs-installer.sh
+  when: t3bs.install_nodejs == "yes"
+
+- name: Execute nodejs installer
+  script: /tmp/nodejs-installer.sh
+  when: t3bs.install_nodejs == "yes"
+
+- name: Install nodejs
+  apt:
+    name: nodejs
+    update_cache: yes
+    state: present
+  when: t3bs.install_nodejs == "yes"
+
+- name: Create MailHog directory
+  file:
+    path: "{{ t3bs.mailhog_folder }}"
+    state: directory
+    mode: 0755
+
+- name: Download MailHog
+  get_url:
+    url: https://github.com/mailhog/MailHog/releases/download/{{ t3bs.mailhog_version }}/MailHog_linux_amd64
+    dest: /tmp/MailHog_linux_amd64_{{ t3bs.mailhog_version }}
+
+- name: Install MailHog
+  copy:
+    remote_src: true
+    src: /tmp/MailHog_linux_amd64_{{ t3bs.mailhog_version }}
+    dest: "{{ t3bs.mailhog_folder }}/mailhog"
+    mode: 0755
+    force: yes
+
+- name: Generate MailHog authentication
+  shell: "{{ t3bs.mailhog_folder }}/mailhog bcrypt {{ t3bs.mailhog_auth_pass }}"
+  register: mailhog_auth
+
+- name: Store MailHog authentication
+  copy:
+    content: "{{ t3bs.mailhog_auth_user }}:{{ mailhog_auth.stdout }}"
+    dest: "{{ t3bs.mailhog_folder }}/auth"
+    mode: 0644
+
+- name: Create MailHog init script
+  template:
+    src: ../templates/init.d.mailhog.sh.j2
+    dest: /etc/init.d/mailhog
+    mode: 0755
+
+- name: Register MailHog service
+  service:
+    name: mailhog
+    enabled: yes
+    state: started
+
+- name: Download MailHog sendmail replacement
+  shell: GOPATH=/tmp/go go get github.com/mailhog/mhsendmail
+
+- name: Install MailHog sendmail replacement
+  copy:
+    remote_src: true
+    src: /tmp/go/bin/mhsendmail
+    dest: "{{ t3bs.mailhog_folder }}/mhsendmail"
+    mode: 0755
+    force: yes
+
+- name: Update php settings (apache2)
+  ini_file:
+    path: /etc/php/7.1/apache2/php.ini
+    section: "{{ item.section }}"
+    option: "{{ item.option }}"
+    value: "{{ item.value }}"
+    backup: yes
+  with_items: "{{ t3bs.php_ini }}"
+
+- name: Update php settings (cli)
+  ini_file:
+    path: /etc/php/7.1/cli/php.ini
+    section: "{{ item.section }}"
+    option: "{{ item.option }}"
+    value: "{{ item.value }}"
+    backup: yes
+  with_items: "{{ t3bs.php_ini_cli }}"
+
+- name: Download composer
+  get_url:
+    url: https://getcomposer.org/installer
+    dest: /tmp/composer-setup.php
+    mode: 0755
+    force: yes
+
+- name: Install composer
+  shell: "php /tmp/composer-setup.php --install-dir=/usr/local/bin --filename=composer"
+  args:
+    creates: /usr/local/bin/composer
+
+- name: Update composer
+  shell: "/usr/local/bin/composer --quiet self-update"
+
+- name: Create/Update www user
+  user:
+    name: "{{ t3bs.www_user }}"
+    groups: "{{ t3bs.www_group }}"
+    append: yes
+    home: "{{ t3bs.www_user_home }}"
+    shell: /bin/bash
+    generate_ssh_key: yes
+    state: present
+
+- name: Set random password for www user
+  shell: echo {{ t3bs.www_user }}:`pwgen -yB 16 1` | chpasswd
+  when: t3bs.www_user != "vagrant"
+
+- name: Set apache to run under different user/group
+  lineinfile:
+    dest: /etc/apache2/envvars
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+    state: present
+  with_items:
+    - { regexp: "^export APACHE_RUN_USER", line: "export APACHE_RUN_USER={{ t3bs.www_user }}"}
+    - { regexp: "^export APACHE_RUN_GROUP", line: "export APACHE_RUN_GROUP={{ t3bs.www_group }}"}
+  notify: restart apache
+
+- name: Create Webroot
+  file:
+    path: "{{ t3bs.document_root }}"
+    state: directory
+    mode: 0755
+
+- name: Create webroot symlink
+  become: yes
+  become_user: "{{ t3bs.www_user }}"
+  file:
+    src: "{{ t3bs.document_root }}"
+    dest: "{{ t3bs.www_user_home }}/www"
+    state: link
+
+- name: Purge project folder
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - "{{ t3bs.document_root }}/{{ t3bs.project_folder }}/vendor"
+    - "{{ t3bs.document_root }}/{{ t3bs.project_folder }}/web/index.php"
+    - "{{ t3bs.document_root }}/{{ t3bs.project_folder }}/web/typo3"
+  when: t3bs.purge_project_folder == "yes"
+
+- name: Install fresh TYPO3 via composer
+  become: yes
+  become_user: "{{ t3bs.www_user }}"
+  shell: composer create-project typo3/cms-base-distribution {{ t3bs.project_folder }} {{ t3bs.typo3_version}}
+  args:
+    chdir: "{{ t3bs.document_root }}"
+    creates: "{{ t3bs.document_root }}/{{ t3bs.project_folder }}/composer.lock"
+  register: fresh_install
+
+- name: Set additional composer options
+  become: yes
+  become_user: "{{ t3bs.www_user }}"
+  shell: composer config {{ item.option }} {{ item.value }}
+  args:
+    chdir: "{{ t3bs.document_root }}/{{ t3bs.project_folder }}"
+  with_items: "{{ t3bs.composer }}"
+
+- name: Disable TYPO3 console extension dummy warning
+  become: yes
+  become_user: "{{ t3bs.www_user }}"
+  shell: composer config extra.helhum/typo3-console.install-extension-dummy 0
+  args:
+    chdir: "{{ t3bs.document_root }}/{{ t3bs.project_folder }}"
+
+- name: Install/Update dependencies for existing TYPO3 project
+  become: yes
+  become_user: "{{ t3bs.www_user }}"
+  shell: composer install --prefer-dist
+  args:
+    chdir: "{{ t3bs.document_root }}/{{ t3bs.project_folder }}"
+  register: nonfresh_install
+  when: fresh_install.changed == false
+
+- name: Install/Update additional composer packages
+  become: yes
+  become_user: "{{ t3bs.www_user }}"
+  shell: composer require {{ item.composer_package }} {{ item.constraint }}
+  args:
+    chdir: "{{ t3bs.document_root }}/{{ t3bs.project_folder }}"
+  with_items: "{{ t3bs.composer_packages }}"
+  when: fresh_install.changed == true
+
+- name: Install/Update TYPO3 community packages
+  become: yes
+  become_user: "{{ t3bs.www_user }}"
+  shell: composer require {{ item.composer_package }} {{ item.constraint }}
+  args:
+    chdir: "{{ t3bs.document_root }}/{{ t3bs.project_folder }}"
+  with_items: "{{ t3bs.typo3_community_extensions }}"
+  when: fresh_install.changed == true
+
+- name: Set mysql root password
+  mysql_user: name=root host={{ item }} password={{ t3bs.db_root_password }} state=present
+  with_items:
+    - localhost
+    - 127.0.0.1
+    - ::1
+  notify: flush privileges
+
+- name: Secure mysql installation
+  command: 'mysql -ne "{{ item }}"'
+  with_items:
+    - DELETE FROM mysql.user WHERE User=''
+    - DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1')
+    - DROP DATABASE IF EXISTS test
+    - DELETE FROM mysql.db WHERE Db='test' OR Db='test\\_%'
+  notify: flush privileges
+
+- name: Drop mysql database
+  mysql_db:
+    name: "{{ t3bs.db_name }}"
+    state: absent
+  when: t3bs.reset_db_on_provision
+
+- name: Create mysql database
+  mysql_db:
+    name: "{{ t3bs.db_name }}"
+    state: present
+
+- name: Create mysql user
+  mysql_user:
+    name: "{{ t3bs.db_user }}"
+    password: "{{ t3bs.db_pass }}"
+    priv: '{{ t3bs.db_name}}.*:ALL'
+    state: present
+  notify: flush privileges
+
+- name: Purge typo3temp folder
+  file:
+    path: "{{ t3bs.document_root }}/{{ t3bs.project_folder }}/web/typo3temp"
+    state: absent
+
+- name: Run TYPO3 setup routine
+  become: yes
+  become_user: "{{ t3bs.www_user }}"
+  shell: vendor/bin/typo3cms install:setup --force --non-interactive --database-user-name '{{ t3bs.db_user }}' --database-user-password '{{ t3bs.db_pass }}' --database-host-name '{{ t3bs.db_host }}' --database-name '{{ t3bs.db_name }}' --use-existing-database --admin-user-name '{{ t3bs.typo3_admin_user }}' --admin-password '{{ t3bs.typo3_admin_pass}}' --site-name '{{ t3bs.typo3_site_name}}'
+  args:
+    chdir: "{{ t3bs.document_root}}/{{ t3bs.project_folder}}"
+
+- name: Install default htaccess
+  become: yes
+  become_user: "{{ t3bs.www_user }}"
+  copy:
+    remote_src: true
+    src: "{{ t3bs.document_root}}/{{ t3bs.project_folder }}/vendor/typo3/cms/_.htaccess"
+    dest: "{{ t3bs.document_root}}/{{ t3bs.project_folder }}/web/.htaccess"
+    mode: 0644
+
+- name: Activate TYPO3 core extensions
+  become: yes
+  become_user: "{{ t3bs.www_user }}"
+  shell: vendor/bin/typo3cms extension:activate {{ item }}
+  args:
+    chdir: "{{ t3bs.document_root}}/{{ t3bs.project_folder}}"
+  with_items: "{{ t3bs.typo3_extensions }}"
+
+- name: Activate community extensions
+  become: yes
+  become_user: "{{ t3bs.www_user }}"
+  shell: vendor/bin/typo3cms extension:activate {{ item.extension_key }}
+  args:
+    chdir: "{{ t3bs.document_root}}/{{ t3bs.project_folder}}"
+  with_items: "{{ t3bs.typo3_community_extensions }}"
+
+- name: Download extension translations
+  become: yes
+  become_user: "{{ t3bs.www_user }}"
+  shell: vendor/bin/typo3cms language:update --locales-to-update '{{ item }}'
+  args:
+    chdir: "{{ t3bs.document_root}}/{{ t3bs.project_folder}}"
+  with_items: "{{ t3bs.typo3_translations }}"
+
+- name: Enable languages
+  become: yes
+  become_user: "{{ t3bs.www_user }}"
+  shell: vendor/bin/typo3cms configuration:set --path EXTCONF/lang/availableLanguages/{{ item.0 }} --value '{{ item.1 }}'
+  args:
+    chdir: "{{ t3bs.document_root}}/{{ t3bs.project_folder}}"
+  with_indexed_items: "{{ t3bs.typo3_languages }}"
+
+- name: Set up mail transport (sendmail)
+  become: yes
+  become_user: "{{ t3bs.www_user }}"
+  shell: vendor/bin/typo3cms configuration:set --path MAIL/{{ item.key }} --value '{{ item.value }}'
+  args:
+    chdir: "{{ t3bs.document_root}}/{{ t3bs.project_folder}}"
+  with_items:
+    - {key: transport, value: sendmail}
+    - {key: transport_sendmail_command, value: /usr/sbin/sendmail -bs}
+  when: t3bs.typo3_mail_transport == "sendmail"
+
+- name: Use mailhog for sendmail transport
+  become: yes
+  become_user: "{{ t3bs.www_user }}"
+  shell: vendor/bin/typo3cms configuration:set --path MAIL/transport_sendmail_command --value '{{ t3bs.mailhog_folder }}/mhsendmail -t --smtp-addr {{ t3bs.mailhog_smtp }}'
+  args:
+    chdir: "{{ t3bs.document_root}}/{{ t3bs.project_folder}}"
+  when:
+    - t3bs.typo3_mail_transport == "sendmail"
+    - t3bs.typo3_mail_use_mailhog == true
+
+- name: Set up mail transport (smtp)
+  become: yes
+  become_user: "{{ t3bs.www_user }}"
+  shell: vendor/bin/typo3cms configuration:set --path MAIL/{{ item.key }} --value '{{ item.value }}'
+  args:
+    chdir: "{{ t3bs.document_root}}/{{ t3bs.project_folder}}"
+  with_items:
+    - {key: transport, value: smtp}
+    - {key: transport_smtp_server, value: "{{ t3bs.typo3_mail_smtp_server }}"}
+    - {key: transport_smtp_encrypt, value: "{{ t3bs.typo3_mail_smtp_encrypt }}"}
+    - {key: transport_smtp_username, value: "{{ t3bs.typo3_mail_smtp_username }}"}
+    - {key: transport_smtp_password, value: "{{ t3bs.typo3_mail_smtp_password }}"}
+  when: t3bs.typo3_mail_transport == "smtp"
+
+- name: Update apache vhost configuration
+  template:
+    src: ../templates/apache.conf.j2
+    dest: /etc/apache2/sites-available/000-default.conf
+    mode: 0644
+  notify: restart apache
+
+- name: Enable apache modules
+  command: a2enmod {{ item }}
+  with_items: "{{ t3bs.apache_modules }}"
+  notify: restart apache
+
+- name: Remove default html folder
+  file:
+    path: "{{ t3bs.document_root}}/html"
+    state: absent
