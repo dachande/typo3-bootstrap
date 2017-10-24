@@ -70,7 +70,7 @@ db_pass: typo3
 #
 # Allow root login though phpMyAdmin
 #
-phpmyadmin_allow_root: true
+phpmyadmin_allow_root: false
 
 #
 # TYPO3 core extensions to be enabled.
