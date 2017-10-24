@@ -62,7 +62,7 @@ More information about MailHog can be found at [github.com/mailhog](https://gith
 
 [phpMyAdmin](https://www.phpmyadmin.net/) is a free software tool written in PHP, intended to handle the administration of MySQL over the Web. You can access phpMyAdmin by visiting http://192.168.101.100/phpmyadmin or http://typo3-bootstrap.dev/phpmyadmin using the TYPO3 database login credentials that have been set in the provisioning configuration.
 
-Under normal circumstances you can't login to phpMyAdmin using the **database root account** because of security restrictions. You can however disable these restrictions by enabling the `phpmyadmin_allow_root` setting in the provisioning configuration.
+Under normal circumstances you can't login to phpMyAdmin using the **database root account** because of security restrictions.
 
 ## Current limitations
 

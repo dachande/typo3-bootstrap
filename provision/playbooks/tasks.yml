@@ -289,13 +289,6 @@
   command: a2enconf phpmyadmin
   notify: restart apache
 
-- name: Allow phpMyAdmin root login
-  command: 'mysql -ne "{{ item }}"'
-  with_items:
-    - UPDATE mysql.user SET plugin = 'mysql_native_password' WHERE User = 'root';
-  notify: flush privileges
-  when: t3bs.phpmyadmin_allow_root
-
 - name: Purge typo3temp folder
   file:
     path: "{{ t3bs.document_root }}/{{ t3bs.project_folder }}/web/typo3temp"

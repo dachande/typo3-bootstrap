@@ -68,11 +68,6 @@ db_user: typo3
 db_pass: typo3
 
 #
-# Allow root login though phpMyAdmin
-#
-phpmyadmin_allow_root: false
-
-#
 # TYPO3 core extensions to be enabled.
 #
 # If you are installing TYPO3 7.6 please make sure that non existent extensions
