@@ -36,7 +36,7 @@ Only a few steps are necessary to get your virtual machine up and running:
     - `vagrant plugin install vagrant-hostmanager`
     - `vagrant plugin install vagrant-vbguest`
 3. Clone this repository.
-4. Edit the provisioning configuration located at `provision/default.yml` and modify it to your needs.
+4. Edit the provisioning configuration located at `configuration.yml` and modify it to your needs.
     - If you want to use automatic update of the VirtualBox guest additions make sure to set `vbguest_auto_update` to `true`.
 5. Run `vagrant up` to boot and provision the virtual machine. If you have installed the `vagrant-hostmanager` plug-in vagrant will ask you for your password to escalate privileges to modify the `/etc/hosts` file.
 
@@ -65,7 +65,6 @@ More information about MailHog can be found at [github.com/mailhog](https://gith
 ## Planned features
 
 * Re-Provision without clearing the database.
-* Implement **MailHog** as a systemd service instead of using SysVinit.
 * **TYPO3 Surf** for automated deployments.
 
 ## What about TYPO3 7.6?
