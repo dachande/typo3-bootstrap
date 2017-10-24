@@ -81,14 +81,20 @@
     dest: "{{ t3bs.mailhog_folder }}/auth"
     mode: 0644
 
+- name: Create MailHog environment
+  template:
+    src: ../templates/mailhog.j2
+    dest: /etc/default/mailhog
+    mode: 0644
+
 - name: Create MailHog init script
   template:
-    src: ../templates/init.d.mailhog.sh.j2
-    dest: /etc/init.d/mailhog
-    mode: 0755
+    src: ../templates/mailhog.service.j2
+    dest: /etc/systemd/system/mailhog.service
+    mode: 0644
 
 - name: Register MailHog service
-  service:
+  systemd:
     name: mailhog
     enabled: yes
     state: started

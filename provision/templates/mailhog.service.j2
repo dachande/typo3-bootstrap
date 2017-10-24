@@ -1,0 +1,15 @@
+[Unit]
+Description=MailHog Service
+After=network.service vagrant.mount
+
+[Service]
+Type=simple
+KillMode=process
+PIDFile=/var/run/mailhog.pid
+User=nobody
+EnvironmentFile=/etc/default/mailhog
+ExecStart={{ t3bs.mailhog_folder }}/mailhog $MAILHOG_OPTS
+ExecReload=/bin/kill -HUP $MAINPID
+
+[Install]
+WantedBy=multi-user.target

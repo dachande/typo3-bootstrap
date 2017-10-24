@@ -9,7 +9,7 @@
 
 - name: restart mailhog
   become: yes
-  service: name=mailhog state=restarted
+  systemd: name=mailhog state=restarted
 
 - name: flush privileges
   become: yes
