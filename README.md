@@ -44,7 +44,7 @@ Only a few steps are necessary to get your virtual machine up and running:
 
 ### TYPO3
 
-After the box has been successfully booted up you can access TYPO3 by pointing your browser to http://192.168.101.100/typo3 (default IP address of your virtual machine).
+After the box has been successfully booted up you can access TYPO3 by pointing your browser to http://192.168.101.100/typo3 (which is the IP address of your virtual machine set in `configuration.yml`).
 
 If you have installed the `vagrant-hostmanager` plug-in you can alternatively access the TYPO3 instance through its hostname http://typo3-bootstrap.dev/typo3.
 
@@ -57,6 +57,12 @@ If you can't access the virtual machine through its default IP address and/or ho
 The default configuration will automatically send all emails to MailHog using the mhsendmail wrapper. If you don't want to use MailHog but your own SMTP server instead, just update the corresponding settings in the provisioning configuration.
 
 More information about MailHog can be found at [github.com/mailhog](https://github.com/mailhog/MailHog)
+
+### phpMyAdmin
+
+[phpMyAdmin](https://www.phpmyadmin.net/) is a free software tool written in PHP, intended to handle the administration of MySQL over the Web. You can access phpMyAdmin by visiting http://192.168.101.100/phpmyadmin or http://typo3-bootstrap.dev/phpmyadmin using the TYPO3 database login credentials that have been set in the provisioning configuration.
+
+Under normal circumstances you can't login to phpMyAdmin using the **database root account** because of security restrictions. You can however disable these restrictions by enabling the `phpmyadmin_allow_root` setting in the provisioning configuration.
 
 ## Current limitations
 
