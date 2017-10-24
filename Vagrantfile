@@ -9,7 +9,7 @@ Vagrant.configure(2) do |config|
 
   _conf = YAML.load(
     File.open(
-      File.join(File.dirname(__FILE__), 'provision/default.yml'),
+      File.join(File.dirname(__FILE__), 'configuration.yml'),
       File::RDONLY
     ).read
   )
