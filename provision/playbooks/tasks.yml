@@ -279,6 +279,16 @@
     state: present
   notify: flush privileges
 
+- name: Link phpMyAdmin configuration
+  file:
+    src: /etc/phpmyadmin/apache.conf
+    dest: /etc/apache2/conf-available/phpmyadmin.conf
+    state: link
+
+- name: Enable phpMyAdmin
+  command: a2enconf phpmyadmin
+  notify: restart apache
+
 - name: Purge typo3temp folder
   file:
     path: "{{ t3bs.document_root }}/{{ t3bs.project_folder }}/web/typo3temp"
