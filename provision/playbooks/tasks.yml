@@ -301,6 +301,14 @@
   args:
     chdir: "{{ t3bs.document_root}}/{{ t3bs.project_folder}}"
 
+- name: Add default robots.txt
+  become: yes
+  become_user: "{{ t3bs.www_user }}"
+  template:
+    src: ../templates/robots.txt.j2
+    dest: "{{ t3bs.document_root}}/{{ t3bs.project_folder }}/web/robots.txt"
+    mode: 0644
+
 - name: Install default htaccess
   become: yes
   become_user: "{{ t3bs.www_user }}"
