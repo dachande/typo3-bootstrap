@@ -100,7 +100,7 @@ typo3_extensions:
 #
 typo3_community_extensions:
   - {composer_package: dmitryd/typo3-realurl, extension_key: realurl, constraint: ~}
-  - {composer_package: typo3/cms-introduction, extension_key: introduction, constraint: ~}
+  - {composer_package: typo3/cms-introduction, extension_key: introduction, constraint: ^3.0}
   # - {composer_package: in2code/powermail, extension_key: powermail, constraint: ~}
   # - {composer_package: in2code/powermail_cond, extension_key: powermail_cond, constraint: ~}
   # - {composer_package: in2code/powermailrecaptcha, extension_key: powermailrecaptcha, constraint: ~}
