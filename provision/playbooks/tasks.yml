@@ -214,6 +214,15 @@
     state: directory
     mode: 0755
 
+- name: Create .gitignore
+  become: yes
+  become_user: "{{ t3bs.www_user }}"
+  template:
+    src: ../templates/gitignore.j2
+    dest: "{{ t3bs.document_root }}/{{ t3bs.project_folder }}/.gitignore"
+    mode: 0644
+    force: no
+
 - name: Create composer.json
   become: yes
   become_user: "{{ t3bs.www_user }}"
