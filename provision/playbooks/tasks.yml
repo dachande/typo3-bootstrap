@@ -197,6 +197,15 @@
     - "{{ t3bs.document_root }}/{{ t3bs.project_folder }}/web/typo3"
   when: t3bs.purge_project_folder == "yes"
 
+- name: Purge typo3temp folder, l10n folder and PackageStates
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - "{{ t3bs.document_root }}/{{ t3bs.project_folder }}/web/typo3temp"
+    - "{{ t3bs.document_root }}/{{ t3bs.project_folder }}/web/typo3conf/l10n"
+    - "{{ t3bs.document_root }}/{{ t3bs.project_folder }}/web/typo3conf/PackageStates.php"
+
 - name: Install fresh TYPO3 via composer
   become: yes
   become_user: "{{ t3bs.www_user }}"
@@ -293,11 +302,6 @@
 - name: Enable phpMyAdmin
   command: a2enconf phpmyadmin
   notify: restart apache
-
-- name: Purge typo3temp folder
-  file:
-    path: "{{ t3bs.document_root }}/{{ t3bs.project_folder }}/web/typo3temp"
-    state: absent
 
 - name: Run TYPO3 setup routine
   become: yes
