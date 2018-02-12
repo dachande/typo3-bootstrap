@@ -79,6 +79,7 @@ typo3_extensions:
   - beuser
   - fluid_styled_content
   - form
+  - func
   - impexp
   - info
   - info_pagetsconfig
@@ -91,6 +92,8 @@ typo3_extensions:
   - setup
   - t3editor
   - tstemplate
+  - wizard_crpages
+  - wizard_sortpages
 
 #
 # TYPO3 community extensions to be installed/enabled
