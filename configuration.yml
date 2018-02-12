@@ -211,9 +211,9 @@ linked_clone: false
 #
 # Additional composer options
 #
-composer:
-  - {option: minimum-stability, value: dev}
-  - {option: prefer-stable, value: 1}
+composer: []
+  # - {option: minimum-stability, value: dev}
+  # - {option: prefer-stable, value: 1}
 
 #
 # Additional composer packages to install
