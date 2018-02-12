@@ -391,6 +391,15 @@
     - {key: transport_smtp_password, value: "{{ t3bs.typo3_mail_smtp_password }}"}
   when: t3bs.typo3_mail_transport == "smtp"
 
+- name: Add custom TYPO3 configuration
+  become: yes
+  become_user: "{{ t3bs.www_user }}"
+  shell: vendor/bin/typo3cms configuration:set --path {{ item.key }} --value {{ item.value }}
+  args:
+    chdir: "{{ t3bs.document_root}}/{{ t3bs.project_folder}}"
+  with_items: "{{ t3bs.typo3_configuration }}"
+  when: t3bs.typo3_configuration
+
 - name: Update apache vhost configuration
   template:
     src: ../templates/apache.conf.j2

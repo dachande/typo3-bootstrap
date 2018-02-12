@@ -164,6 +164,18 @@ typo3_translations:
 typo3_languages:
   - de
 
+typo3_configuration:
+  - {key: BE/lockSSL, value: true}
+  - {key: SYS/cookieSecure, value: 1}
+  - {key: BE/debug, value: 1}
+  - {key: FE/debug, value: 1}
+  - {key: SYS/devIPmask, value: \*}
+  - {key: SYS/displayErrors, value: 1}
+  - {key: SYS/enableDeprecationLog, value: file}
+  - {key: SYS/sqlDebug, value: 1}
+  - {key: SYS/systemLogLevel, value: 0}
+  - {key: SYS/exceptionalErrors, value: 28674}
+
 #
 # System locales to install
 #
