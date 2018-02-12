@@ -187,7 +187,7 @@
     dest: "{{ t3bs.www_user_home }}/www"
     state: link
 
-- name: Purge project folder
+- name: Purge project folder contents
   file:
     path: "{{ item }}"
     state: absent
@@ -206,14 +206,22 @@
     - "{{ t3bs.document_root }}/{{ t3bs.project_folder }}/web/typo3conf/l10n"
     - "{{ t3bs.document_root }}/{{ t3bs.project_folder }}/web/typo3conf/PackageStates.php"
 
-- name: Install fresh TYPO3 via composer
+- name: Create project folder
   become: yes
   become_user: "{{ t3bs.www_user }}"
-  shell: "{{ t3bs.composer_bin_path }}/{{ t3bs.composer_bin }} create-project typo3/cms-base-distribution {{ t3bs.project_folder }} {{ t3bs.typo3_version}}"
-  args:
-    chdir: "{{ t3bs.document_root }}"
-    creates: "{{ t3bs.document_root }}/{{ t3bs.project_folder }}/composer.lock"
-  register: fresh_install
+  file:
+    path: "{{ t3bs.document_root }}/{{ t3bs.project_folder }}"
+    state: directory
+    mode: 0755
+
+- name: Create composer.json
+  become: yes
+  become_user: "{{ t3bs.www_user }}"
+  template:
+    src: ../templates/composer.json.j2
+    dest: "{{ t3bs.document_root }}/{{ t3bs.project_folder }}/composer.json"
+    mode: 0644
+    force: no
 
 - name: Set additional composer options
   become: yes
@@ -230,14 +238,17 @@
   args:
     chdir: "{{ t3bs.document_root }}/{{ t3bs.project_folder }}"
 
-- name: Install/Update dependencies for existing TYPO3 project
+- name: Check for existing composer.lock file
+  stat:
+    path: "{{ t3bs.document_root }}/{{ t3bs.project_folder }}/composer.lock"
+  register: composer_lock_file
+
+- name: Install/Update dependencies for TYPO3 project
   become: yes
   become_user: "{{ t3bs.www_user }}"
   shell: "{{ t3bs.composer_bin_path }}/{{ t3bs.composer_bin }} install --prefer-dist"
   args:
     chdir: "{{ t3bs.document_root }}/{{ t3bs.project_folder }}"
-  register: nonfresh_install
-  when: fresh_install.changed == false
 
 - name: Install/Update additional composer packages
   become: yes
@@ -246,7 +257,7 @@
   args:
     chdir: "{{ t3bs.document_root }}/{{ t3bs.project_folder }}"
   with_items: "{{ t3bs.composer_packages }}"
-  when: fresh_install.changed == true
+  when: composer_lock_file.stat.exists == false
 
 - name: Install/Update TYPO3 community packages
   become: yes
@@ -255,7 +266,7 @@
   args:
     chdir: "{{ t3bs.document_root }}/{{ t3bs.project_folder }}"
   with_items: "{{ t3bs.typo3_community_extensions }}"
-  when: fresh_install.changed == true
+  when: composer_lock_file.stat.exists == false
 
 - name: Set mysql root password
   mysql_user: name=root host={{ item }} password={{ t3bs.db_root_password }} state=present

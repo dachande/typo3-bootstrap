@@ -35,16 +35,21 @@ ip: 192.168.101.100
 # Installing other versions than 8.7 is not fully tested and
 # can fail at any time!
 #
-# If you want to install TYPO3 7.6 set typo3_version to 7.6.10
+# If you want to install TYPO3 7.6 set typo3_version to ^7.6
 # This will install the latest version of the 7.6.x branch.
-# In this case please make sure to add helhum/typo3-console in the
-# composer_packages setting below.
-# Please also make sure that non existent core TYPO3 extensions are
+# Please make sure that non existent core TYPO3 extensions are
 # disabled (like rte_ckeditor).
 #
-typo3_version: 8.7
-#typo3_version: 7.6.10
+typo3_version: ^8.7
+#typo3_version: ^7.6
 typo3_site_name: TYPO3 Bootstrap
+
+#
+# Additional settings written to initial composer.json
+#
+base_package: dachande/typo3-bootstrap
+base_description: TYPO3 CMS Base Distribution
+base_license: GPL-2.0+
 
 #
 # TYPO3 Admin User
@@ -151,6 +156,8 @@ typo3_mail_use_mailhog: true
 #
 # Translations
 #
+# These translations will be downloaded and put in the typo3conf/l10n directory.
+#
 typo3_translations:
   - en
   - de
@@ -217,12 +224,8 @@ composer: []
 #
 # Additional composer packages to install
 #
-# Note: If you install a TYPO3 version below 8.7 you will need to add helhum/typo3-console
-# as it is not in the default requirements of the TYPO3 distribution package that is
-# used for provisioning.
-#
-composer_packages: []
-#  - {composer_package: helhum/typo3-console, constraint: ~}
+composer_packages:
+  - {composer_package: helhum/typo3-console, constraint: ~}
 
 #
 # PHP version to use.

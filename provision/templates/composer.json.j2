@@ -1,0 +1,20 @@
+{
+	"repositories": [
+		{
+			"type": "composer",
+			"url": "https://composer.typo3.org/"
+		}
+	],
+	"name": "{{ t3bs.base_package }}",
+	"description": "{{ t3bs.base_description }}",
+	"license": "{{ t3bs.base_license }}",
+	"require": {
+		"typo3/cms": "{{ t3bs.typo3_version }}"
+	},
+	"extra": {
+		"typo3/cms": {
+			"cms-package-dir": "{$vendor-dir}/typo3/cms",
+			"web-dir": "web"
+		}
+	}
+}
