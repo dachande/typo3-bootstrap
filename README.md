@@ -19,7 +19,7 @@ This package is using [bento/ubuntu-16.04](https://app.vagrantup.com/bento/boxes
 
 * A Linux or MacOS machine (not tested on Windows)
 * Oracle VirtualBox
-* Vagrant 1.8.6+
+* Vagrant 2.0+
 * Ansible
 
 ## Optional dependencies
@@ -63,6 +63,10 @@ More information about MailHog can be found at [github.com/mailhog](https://gith
 [phpMyAdmin](https://www.phpmyadmin.net/) is a free software tool written in PHP, intended to handle the administration of MySQL over the Web. You can access phpMyAdmin by visiting http://192.168.101.100/phpmyadmin or http://typo3-bootstrap.dev/phpmyadmin using the TYPO3 database login credentials that have been set in the provisioning configuration.
 
 Under normal circumstances you can't login to phpMyAdmin using the **database root account** because of security restrictions.
+
+### SSH
+
+To connect to the virtual machine through SSH just enter `vagrant ssh` and you are good to go.
 
 ## Current limitations
 
