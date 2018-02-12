@@ -68,6 +68,21 @@ Under normal circumstances you can't login to phpMyAdmin using the **database ro
 
 To connect to the virtual machine through SSH just enter `vagrant ssh` and you are good to go.
 
+## Post configuration
+
+Modern TYPO3 installations are now shipped with a fanstatic tool to configure most stuff directly on the command line. Just SSH into the virtual machine and let the magic happen:
+
+```
+user@local$ vagrant ssh
+
+vagrant@vm$ cd /var/www/typo3-website
+vagrant@vm$ vendor/bin/typo3cms
+```
+
+If you run `typo3cms` without any parameters you'll get a list of available commands. To get additional help for a specific command just use `vendor/bin/typo3cms help <command>`.
+
+If you want to clear the TYPO3 cache just run `vendor/bin/typo3cms cache:clear`. This is way more fast than clearing the cache through the TYPO3 backend especially when not logged in.
+
 ## Current limitations
 
 * Re-Provisioning the machine will clear the database. This is currently necessary as the *setup* command run from the *typo3cms* CLI will fail otherwise as it needs an empty database to perform its setup routine.
