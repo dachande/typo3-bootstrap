@@ -110,9 +110,14 @@
     mode: 0755
     force: yes
 
+- name: Set default PHP version
+  alternatives:
+    name: php
+    path: "{{ t3bs.php_bin_path }}/php{{ t3bs.php_version }}"
+
 - name: Update php settings (apache2)
   ini_file:
-    path: /etc/php/7.1/apache2/php.ini
+    path: /etc/php/{{ t3bs.php_version }}/apache2/php.ini
     section: "{{ item.section }}"
     option: "{{ item.option }}"
     value: "{{ item.value }}"
@@ -121,7 +126,7 @@
 
 - name: Update php settings (cli)
   ini_file:
-    path: /etc/php/7.1/cli/php.ini
+    path: /etc/php/{{ t3bs.php_version }}/cli/php.ini
     section: "{{ item.section }}"
     option: "{{ item.option }}"
     value: "{{ item.value }}"
@@ -136,12 +141,12 @@
     force: yes
 
 - name: Install composer
-  shell: "php /tmp/composer-setup.php --install-dir=/usr/local/bin --filename=composer"
+  shell: php /tmp/composer-setup.php --install-dir={{ t3bs.composer_bin_path }} --filename={{ t3bs.composer_bin }}
   args:
-    creates: /usr/local/bin/composer
+    creates: "{{ t3bs.composer_bin_path }}/{{ t3bs.composer_bin }}"
 
 - name: Update composer
-  shell: "/usr/local/bin/composer --quiet self-update"
+  shell: "{{ t3bs.composer_bin_path }}/{{ t3bs.composer_bin }} --quiet self-update"
 
 - name: Create/Update www user
   user:
@@ -195,7 +200,7 @@
 - name: Install fresh TYPO3 via composer
   become: yes
   become_user: "{{ t3bs.www_user }}"
-  shell: composer create-project typo3/cms-base-distribution {{ t3bs.project_folder }} {{ t3bs.typo3_version}}
+  shell: "{{ t3bs.composer_bin_path }}/{{ t3bs.composer_bin }} create-project typo3/cms-base-distribution {{ t3bs.project_folder }} {{ t3bs.typo3_version}}"
   args:
     chdir: "{{ t3bs.document_root }}"
     creates: "{{ t3bs.document_root }}/{{ t3bs.project_folder }}/composer.lock"
@@ -204,7 +209,7 @@
 - name: Set additional composer options
   become: yes
   become_user: "{{ t3bs.www_user }}"
-  shell: composer config {{ item.option }} {{ item.value }}
+  shell: "{{ t3bs.composer_bin_path }}/{{ t3bs.composer_bin }} config {{ item.option }} {{ item.value }}"
   args:
     chdir: "{{ t3bs.document_root }}/{{ t3bs.project_folder }}"
   with_items: "{{ t3bs.composer }}"
@@ -212,14 +217,14 @@
 - name: Disable TYPO3 console extension dummy warning
   become: yes
   become_user: "{{ t3bs.www_user }}"
-  shell: composer config extra.helhum/typo3-console.install-extension-dummy 0
+  shell: "{{ t3bs.composer_bin_path }}/{{ t3bs.composer_bin }} config extra.helhum/typo3-console.install-extension-dummy 0"
   args:
     chdir: "{{ t3bs.document_root }}/{{ t3bs.project_folder }}"
 
 - name: Install/Update dependencies for existing TYPO3 project
   become: yes
   become_user: "{{ t3bs.www_user }}"
-  shell: composer install --prefer-dist
+  shell: "{{ t3bs.composer_bin_path }}/{{ t3bs.composer_bin }} install --prefer-dist"
   args:
     chdir: "{{ t3bs.document_root }}/{{ t3bs.project_folder }}"
   register: nonfresh_install
@@ -228,7 +233,7 @@
 - name: Install/Update additional composer packages
   become: yes
   become_user: "{{ t3bs.www_user }}"
-  shell: composer require {{ item.composer_package }} {{ item.constraint }}
+  shell: "{{ t3bs.composer_bin_path }}/{{ t3bs.composer_bin }} require {{ item.composer_package }} {{ item.constraint }}"
   args:
     chdir: "{{ t3bs.document_root }}/{{ t3bs.project_folder }}"
   with_items: "{{ t3bs.composer_packages }}"
@@ -237,7 +242,7 @@
 - name: Install/Update TYPO3 community packages
   become: yes
   become_user: "{{ t3bs.www_user }}"
-  shell: composer require {{ item.composer_package }} {{ item.constraint }}
+  shell: "{{ t3bs.composer_bin_path }}/{{ t3bs.composer_bin }} require {{ item.composer_package }} {{ item.constraint }}"
   args:
     chdir: "{{ t3bs.document_root }}/{{ t3bs.project_folder }}"
   with_items: "{{ t3bs.typo3_community_extensions }}"

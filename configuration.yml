@@ -209,6 +209,11 @@ composer_packages: []
 #  - {composer_package: helhum/typo3-console, constraint: ~}
 
 #
+# PHP version to use.
+#
+php_version: 7.1
+
+#
 # PHP settings
 #
 php_ini:
@@ -287,3 +292,6 @@ www_user: vagrant
 www_group: www-data
 www_user_home: /home/vagrant
 mailhog_folder: /opt/mailhog
+composer_bin_path: /usr/local/bin
+composer_bin: composer
+php_bin_path: /usr/bin
