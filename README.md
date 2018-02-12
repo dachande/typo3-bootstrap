@@ -9,7 +9,7 @@ This package is using [bento/ubuntu-16.04](https://app.vagrantup.com/bento/boxes
 * TYPO3 8.7
 * Apache 2.4
 * MariaDB 10.0
-* PHP 7.1
+* PHP 7.1 (customizable via provisioning configuration)
 * GraphicsMagick 1.3
 * MailHog 1.0.0
 * PhpMyAdmin 4.5.4
@@ -78,6 +78,12 @@ Under normal circumstances you can't login to phpMyAdmin using the **database ro
 Although this packages is meant to provision TYPO3 8.7 it should also be possible provisioning an earlier TYPO3 version like 7.6. Please bear in mind that this feature has not yet been fully tested so there is no 100% guarantee that this will work.
 
 Please check the comments in the provisioning configuration for additional information on how to set up this package to provision TYPO3 7.6.
+
+## PHP Version
+
+By default PHP 7.1 is installed/used on the virtual machine. You can however customize the installed PHP version by changing the list of installed packages and set the correct PHP version in the provisioning configuration.
+
+If you want to use PHP 7.2 for instance, just change `php_version` to `7.2` and change all occurences of `php7.1` to `php7.2` in the `requirements` section in `configuration.yml`.
 
 ## Credits
 
