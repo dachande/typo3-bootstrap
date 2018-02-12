@@ -16,6 +16,6 @@ realurl_autoconf.php
 
 # All extensions in typo3conf/ext are ignored by default
 # as they are managed by composer and should not be in VCS.
-# If you develop custom extension you need to un-ignore
-# them here:
+# If you develop custom extension and do not provide them
+# as a composer package you need to manually un-ignore them here:
 # e.g. !site/**/typo3conf/ext/rw_foobar/
