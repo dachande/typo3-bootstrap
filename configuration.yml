@@ -175,6 +175,11 @@ system_locales:
 default_locale: de_DE.UTF-8
 
 #
+# Replace existing .htaccess file with default
+#
+replace_htaccess: no
+
+#
 # DB will be reset on provision
 #
 # Setting this to 'false' is currently not supported as the

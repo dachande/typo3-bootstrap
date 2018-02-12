@@ -322,6 +322,7 @@
     src: "{{ t3bs.document_root}}/{{ t3bs.project_folder }}/vendor/typo3/cms/_.htaccess"
     dest: "{{ t3bs.document_root}}/{{ t3bs.project_folder }}/web/.htaccess"
     mode: 0644
+    force: "{{ t3bs.replace_htaccess }}"
 
 - name: Activate TYPO3 core extensions
   become: yes
