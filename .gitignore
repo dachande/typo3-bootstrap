@@ -5,9 +5,14 @@ provision/playbook.retry
 site/html
 LocalConfiguration.php
 PackageStates.php
-site/**/typo3conf/ext/
+site/**/typo3conf/ext/*
 site/**/typo3conf/l10n/
+site/**/typo3conf/deprecation*
+site/**/fileadmin/_processed_/
+site/**/fileadmin/_temp_/
 typo3temp
+ENABLE_INSTALL_TOOL
+realurl_autoconf.php
 
 # All extensions in typo3conf/ext are ignored by default
 # as they are managed by composer and should not be in VCS.
