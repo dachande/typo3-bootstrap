@@ -89,6 +89,7 @@ If you want to clear the TYPO3 cache just run `vendor/bin/typo3cms cache:clear`.
 
 ## Planned features
 
+* Add TLS encryption
 * Re-Provision without clearing the database.
 * **TYPO3 Surf** for automated deployments.
 
