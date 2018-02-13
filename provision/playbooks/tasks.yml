@@ -35,6 +35,53 @@
   apt: name={{ item }} state=present
   with_items: "{{ t3bs.requirements }}"
 
+- name: Create custom CA certificate directory
+  file:
+    path: /usr/local/share/ca-certificates/extra
+    state: directory
+    mode: 0755
+  when: t3bs.use_tls == true
+
+- name: Import custom CA
+  copy:
+    src: /vagrant/provision/ssl/certs/ca.crt.pem
+    dest: /usr/local/share/ca-certificates/extra/dschultheis_ca.crt
+    mode: 0644
+  when: t3bs.use_tls == true
+
+- name: Refresh ca-certificates
+  command: update-ca-certificates
+  when: t3bs.use_tls == true
+
+- name: Create custom certificate directory
+  file:
+    path: /etc/ssl/typo3
+    state: directory
+    mode: 0755
+  when: t3bs.use_tls == true
+
+- name: Get custom certificates
+  command: find /vagrant/provision/ssl -type f
+  register: certificates_to_copy
+  when: t3bs.use_tls == true
+
+- name: Import custom certificates
+  copy:
+    src: "{{ item }}"
+    dest: /etc/ssl/typo3
+    owner: root
+    group: root
+    mode: 0644
+    remote_src: true
+  with_items: "{{ certificates_to_copy.stdout_lines }}"
+  when: t3bs.use_tls == true
+
+- name: Fix private key permissions
+  file:
+    path: /etc/ssl/typo3/typo3.key.pem
+    mode: 0600
+  when: t3bs.use_tls == true
+
 - name: Download nodejs installer
   get_url:
     url: https://deb.nodesource.com/setup_6.x
@@ -195,7 +242,7 @@
     - "{{ t3bs.document_root }}/{{ t3bs.project_folder }}/vendor"
     - "{{ t3bs.document_root }}/{{ t3bs.project_folder }}/web/index.php"
     - "{{ t3bs.document_root }}/{{ t3bs.project_folder }}/web/typo3"
-  when: t3bs.purge_project_folder == "yes"
+  when: t3bs.purge_project_folder == true
 
 - name: Purge typo3temp folder, l10n folder and PackageStates
   file:
@@ -430,6 +477,19 @@
     dest: /etc/apache2/sites-available/000-default.conf
     mode: 0644
   notify: restart apache
+
+- name: Update apache vhost configuration (ssl)
+  template:
+    src: ../templates/apache.conf.ssl.j2
+    dest: /etc/apache2/sites-available/default-ssl.conf
+    mode: 0644
+  notify: restart apache
+  when: t3bs.use_tls == true
+
+- name: Enable apache vhost configuration (ssl)
+  command: a2ensite default-ssl
+  notify: restart apache
+  when: t3bs.use_tls == true
 
 - name: Enable apache modules
   command: a2enmod {{ item }}

@@ -37,11 +37,34 @@ cpus: 1
 # Network Settings
 #
 # Feel free to edit the hostname and/or IP address to your liking.
-# You should however refrain from using the .dev TLD unless using TLS encryption
-# which is currently not enabled by default.
+#
+# If you want to use TLS encryption without any certificate warning the
+# following restrictions apply:
+#
+# * You need to import the provided CA certificate into your browser.
+#   The certificate is located in /provision/ssl/certs/ca.crt.pem
+#
+# * The default SSL certificate provided will only validate when using one of
+#   the following hostnames:
+#   - typo3-bootstrap.test / .dev
+#   - *.typo3-bootstrap.test / .dev
+#   - *.typo3-project.test / .dev
+#   - *.typo3.test / .dev
+#
+# * If you want to use different hostnames you'll have to create your own
+#   certification authority and certificate(s).
+#
+# If you don't want to use TLS encryption at all you should however refrain
+# from using the .dev TLD as it is forced to HTTPS through builtin HSTS in
+# Google Chrome.
 #
 hostname: typo3-bootstrap.test
 ip: 192.168.101.100
+
+#
+# Enable/disable TLS encryption
+#
+use_tls: true
 
 #
 # TYPO3 Settings
@@ -78,7 +101,7 @@ typo3_admin_pass: changeme
 # TYPO3 Path
 #
 project_folder: typo3-website
-purge_project_folder: "no"
+purge_project_folder: false
 
 #
 # TYPO3 Database settings
@@ -209,8 +232,8 @@ typo3_languages:
 # also set when you enable debug mode in the TYPO3 install tool.
 #
 typo3_configuration:
-  # - {key: BE/lockSSL, value: true}
-  # - {key: SYS/cookieSecure, value: 1}
+  - {key: BE/lockSSL, value: true}
+  - {key: SYS/cookieSecure, value: 1}
   - {key: BE/debug, value: 1}
   - {key: FE/debug, value: 1}
   - {key: SYS/devIPmask, value: \*}

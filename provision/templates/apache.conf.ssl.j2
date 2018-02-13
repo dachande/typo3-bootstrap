@@ -16,11 +16,10 @@
 
         SSLEngine on
 
-        SSLCertificateFile    /etc/ssl/typo3/typo3.cert.pem
+        SSLCertificateFile    /etc/ssl/typo3/typo3.crt.pem
         SSLCertificateKeyFile /etc/ssl/typo3/typo3.key.pem
 
         SSLCACertificatePath /etc/ssl/certs/
-        SSLCACertificateFile /etc/ssl/typo3/ca-chain.cert.pem
 
         <FilesMatch "\.(cgi|shtml|phtml|php)$">
             SSLOptions +StdEnvVars

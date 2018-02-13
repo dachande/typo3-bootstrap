@@ -75,6 +75,7 @@ Vagrant.configure(2) do |config|
         't3bs_typo3_version' => _conf['typo3_version'],
         't3bs_hostname' => _conf['hostname'],
         't3bs_ip' => _conf['ip'],
+        't3bs_use_tls' => _conf['use_tls'],
         't3bs_typo3_admin_user' => _conf['typo3_admin_user'],
         't3bs_typo3_admin_pass' => _conf['typo3_admin_pass'],
         't3bs_mailhog_auth_user' => _conf['mailhog_auth_user'],
