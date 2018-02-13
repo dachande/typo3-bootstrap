@@ -170,6 +170,12 @@ typo3_translations:
 typo3_languages:
   - de
 
+#
+# Additional TYPO3 settings written to typo3conf/LocalConfiguration.php
+#
+# These configuration options mainly contain options for debugging that are
+# also set when you enable debug mode in the TYPO3 install tool.
+#
 typo3_configuration:
   # - {key: BE/lockSSL, value: true}
   # - {key: SYS/cookieSecure, value: 1}
