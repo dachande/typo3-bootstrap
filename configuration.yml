@@ -4,7 +4,12 @@
 # ##################################################################
 
 #
-# General Settings
+# General settings
+#
+# The base box used for provisioning should not be changed unless you know what
+# you are doing. If you want to use a different box, keep in mind that the
+# predefined ansible tasks are optimized for Ubuntu and may fail when using a
+# base box other than a Ubuntu box.
 #
 box: bento/ubuntu-16.04
 server_admin: d.schultheis@kabel-salat.net
@@ -12,19 +17,28 @@ server_admin: d.schultheis@kabel-salat.net
 #
 # Enable/disable automatic virtualbox guest additions update
 #
-# You generally don't need to enable this option unless the current version of your
-# vagrant box is really old and uses an outdated version of the virtualbox guest additions.
+# You generally don't need to enable this option unless the current version of
+# your vagrant box is really old and uses an outdated version of the virtualbox
+# guest additions.
 #
 vbguest_auto_update: false
 
 #
-# Virtual Machine Settings
+# Virtual machine settings
+#
+# The default options should be sufficient in most cases but it may be possible
+# that the virtual machine runs out of memory if doing memory consuming tasks.
+# In case this happens just boost up the memory to 2GB (2048).
 #
 memory: 1024
 cpus: 1
 
 #
 # Network Settings
+#
+# Feel free to edit the hostname and/or IP address to your liking.
+# You should however refrain from using the .dev TLD unless using TLS encryption
+# which is currently not enabled by default.
 #
 hostname: typo3-bootstrap.test
 ip: 192.168.101.100
@@ -36,16 +50,17 @@ ip: 192.168.101.100
 # can fail at any time!
 #
 # If you want to install TYPO3 7.6 set typo3_version to ^7.6
-# This will install the latest version of the 7.6.x branch.
-# Please make sure that non existent core TYPO3 extensions are
-# disabled (like rte_ckeditor).
+# This will install the latest version of the 7.6.x branch. Please make sure
+# that non existent core TYPO3 extensions are then disabled (like rte_ckeditor).
 #
 typo3_version: ^8.7
-#typo3_version: ^7.6
+# typo3_version: ^7.6
 typo3_site_name: TYPO3 Bootstrap
 
 #
 # Additional settings written to initial composer.json
+#
+# These additional settings will be written to the initial composer.json file.
 #
 base_package: dachande/typo3-bootstrap
 base_description: TYPO3 CMS Base Distribution
@@ -53,6 +68,8 @@ base_license: GPL-2.0+
 
 #
 # TYPO3 Admin User
+#
+# These are the login credentials for the TYPO3 administrator user account.
 #
 typo3_admin_user: admin
 typo3_admin_pass: changeme
@@ -74,6 +91,9 @@ db_pass: typo3
 
 #
 # TYPO3 core extensions to be enabled.
+#
+# This is a list of core extensions that should be initially enabled. You can
+# always enable additional core extensions later on if needed.
 #
 # If you are installing TYPO3 7.6 please make sure that non existent extensions
 # like 'rte_ckeditor' are disabled. In TYPO3 7.6 use 'rtehtmlarea' instead.
@@ -102,6 +122,18 @@ typo3_extensions:
 
 #
 # TYPO3 community extensions to be installed/enabled
+#
+# This list contains all community extensions that will be downloaded, installed
+# and automatically activated. If you want to install a package deviating from
+# the latest stable version, you have to set a version constraint. If you set
+# a development version constraint (e.g. dev-master) you'll also need to set the
+# minimum-stability settings to dev in the additional composer settings below.
+#
+# For demonstration purposes the typo3/cms-introduction package ist also
+# installed. If you want to start a new project you should remove that package
+# from this list before provisioning.
+#
+# If a
 #
 typo3_community_extensions:
   - {composer_package: dmitryd/typo3-realurl, extension_key: realurl, constraint: ~}
@@ -135,12 +167,12 @@ typo3_community_extensions:
 # that option. Instead set its value to ~ (tilde)
 #
 # For more information please have a look at the official TYPO3 Mail
-# API documentation
+# API documentation.
 #
 # https://docs.typo3.org/typo3cms/CoreApiReference/ApiOverview/Mail/Index.html
 #
 # For additional information about MailHog please visit the MailHog Git repository
-# at github
+# on github.
 #
 # https://github.com/mailhog/MailHog
 #
@@ -191,11 +223,14 @@ typo3_configuration:
 #
 # System locales to install
 #
-# Notice: en_US locales are already installed
+# Notice: en_US locale is already installed
 #
 system_locales:
   - de_DE.UTF-8
 
+#
+# Default system locale
+#
 default_locale: de_DE.UTF-8
 
 #
