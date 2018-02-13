@@ -44,15 +44,15 @@ Only a few steps are necessary to get your virtual machine up and running:
 
 ### TYPO3
 
-After the box has been successfully booted up you can access TYPO3 by pointing your browser to http://192.168.101.100/typo3 (which is the IP address of your virtual machine set in `configuration.yml`).
+After the box has been successfully booted up you can access TYPO3 by pointing your browser to https://192.168.101.100/typo3 (which is the IP address of your virtual machine set in `configuration.yml`).
 
-If you have installed the `vagrant-hostmanager` plug-in you can alternatively access the TYPO3 instance through its hostname http://typo3-bootstrap.dev/typo3.
+If you have installed the `vagrant-hostmanager` plug-in you can alternatively access the TYPO3 instance through its hostname https://typo3-bootstrap.test/typo3.
 
 If you can't access the virtual machine through its default IP address and/or hostname chances are you have modified these information in the provisioning configuration.
 
 ### MailHog
 
-[MailHog](https://github.com/mailhog/MailHog) is a virtual SMTP server and email testing tool for developers and is automatically installed on the virtual machine. To access the Web-UI just visit http://192.168.101.100:8025 or http://typo3-bootstrap.dev:8025 and enter the username and password that have been set in the provisioning configuration.
+[MailHog](https://github.com/mailhog/MailHog) is a virtual SMTP server and email testing tool for developers and is automatically installed on the virtual machine. To access the Web-UI just visit http://192.168.101.100:8025 or http://typo3-bootstrap.test:8025 and enter the username and password that have been set in the provisioning configuration.
 
 The default configuration will automatically send all emails to MailHog using the mhsendmail wrapper. If you don't want to use MailHog but your own SMTP server instead, just update the corresponding settings in the provisioning configuration.
 
@@ -60,7 +60,7 @@ More information about MailHog can be found at [github.com/mailhog](https://gith
 
 ### phpMyAdmin
 
-[phpMyAdmin](https://www.phpmyadmin.net/) is a free software tool written in PHP, intended to handle the administration of MySQL over the Web. You can access phpMyAdmin by visiting http://192.168.101.100/phpmyadmin or http://typo3-bootstrap.dev/phpmyadmin using the TYPO3 database login credentials that have been set in the provisioning configuration.
+[phpMyAdmin](https://www.phpmyadmin.net/) is a free software tool written in PHP, intended to handle the administration of MySQL over the Web. You can access phpMyAdmin by visiting http://192.168.101.100/phpmyadmin or http://typo3-bootstrap.test/phpmyadmin using the TYPO3 database login credentials that have been set in the provisioning configuration.
 
 Under normal circumstances you can't login to phpMyAdmin using the **database root account** because of security restrictions.
 
@@ -83,16 +83,6 @@ If you run `typo3cms` without any parameters you'll get a list of available comm
 
 If you want to clear the TYPO3 cache just run `vendor/bin/typo3cms cache:clear`. This is way more fast than clearing the cache through the TYPO3 backend especially when not logged in.
 
-## Current limitations
-
-* Re-Provisioning the machine will clear the database. This is currently necessary as the *setup* command run from the *typo3cms* CLI will fail otherwise as it needs an empty database to perform its setup routine.
-
-## Planned features
-
-* Add TLS encryption
-* Re-Provision without clearing the database.
-* **TYPO3 Surf** for automated deployments.
-
 ## What about TYPO3 7.6?
 
 Although this packages is meant to provision TYPO3 8.7 it should also be possible provisioning an earlier TYPO3 version like 7.6. Please bear in mind that this feature has not yet been fully tested so there is no 100% guarantee that this will work.
@@ -104,6 +94,21 @@ Please check the comments in the provisioning configuration for additional infor
 By default PHP 7.1 is installed/used on the virtual machine. You can however customize the installed PHP version by changing the list of installed packages and set the correct PHP version in the provisioning configuration.
 
 If you want to use PHP 7.2 for instance, just change `php_version` to `7.2` and change all occurences of `php7.1` to `php7.2` in the `requirements` section in `configuration.yml`.
+
+## TLS encryption
+
+TLS encryption is enabled by default. In order to avoid certificate warnings in your browser you'll need to import the custom CA certificate into your browser. The certificate is located in `/provision/ssl/certs/ca.crt.pem`
+
+Additional information on how to customize your hostname without breaking validation of the TLS certificate can be found in the network settings in `configuration.yml`.
+
+## Current limitations
+
+* Re-Provisioning the machine will clear the database. This is currently necessary as the *setup* command run from the *typo3cms* CLI will fail otherwise as it needs an empty database to perform its setup routine.
+
+## Planned features
+
+* Re-Provision without clearing the database.
+* Implementation of **TYPO3 Surf** for automated deployments.
 
 ## Credits
 
