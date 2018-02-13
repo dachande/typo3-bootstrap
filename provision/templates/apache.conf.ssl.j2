@@ -1,0 +1,32 @@
+<IfModule mod_ssl.c>
+    <VirtualHost _default_:443>
+        ServerAdmin {{ t3bs.server_admin }}
+        ServerName {{ t3bs.hostname }}
+
+        DocumentRoot {{ t3bs.document_root}}/{{ t3bs.project_folder }}/web
+
+        ErrorLog /var/log/apache2/typo3-ssl-error.log
+        CustomLog /var/log/apache2/typo3-ssl-access.log combined
+
+        <Directory "{{ t3bs.document_root}}/{{ t3bs.project_folder }}/web">
+            Options FollowSymLinks
+            AllowOverride All
+            Require all granted
+        </Directory>
+
+        SSLEngine on
+
+        SSLCertificateFile    /etc/ssl/typo3/typo3.cert.pem
+        SSLCertificateKeyFile /etc/ssl/typo3/typo3.key.pem
+
+        SSLCACertificatePath /etc/ssl/certs/
+        SSLCACertificateFile /etc/ssl/typo3/ca-chain.cert.pem
+
+        <FilesMatch "\.(cgi|shtml|phtml|php)$">
+            SSLOptions +StdEnvVars
+        </FilesMatch>
+        <Directory /usr/lib/cgi-bin>
+            SSLOptions +StdEnvVars
+        </Directory>
+    </VirtualHost>
+</IfModule>
