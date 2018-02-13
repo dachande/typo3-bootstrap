@@ -171,8 +171,8 @@ typo3_languages:
   - de
 
 typo3_configuration:
-  - {key: BE/lockSSL, value: true}
-  - {key: SYS/cookieSecure, value: 1}
+  # - {key: BE/lockSSL, value: true}
+  # - {key: SYS/cookieSecure, value: 1}
   - {key: BE/debug, value: 1}
   - {key: FE/debug, value: 1}
   - {key: SYS/devIPmask, value: \*}
