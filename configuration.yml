@@ -69,15 +69,10 @@ use_tls: true
 #
 # TYPO3 Settings
 #
-# Installing other versions than 8.7 is not fully tested and
-# can fail at any time!
-#
-# If you want to install TYPO3 7.6 set typo3_version to ^7.6
-# This will install the latest version of the 7.6.x branch. Please make sure
-# that non existent core TYPO3 extensions are then disabled (like rte_ckeditor).
+# Do not attempt to install TYPO3 below 8.7 as it will most likely fail as TYPO3 7.6 support
+# has been dropped.
 #
 typo3_version: ^8.7
-# typo3_version: ^7.6
 typo3_site_name: TYPO3 Bootstrap
 
 #
@@ -119,9 +114,6 @@ db_pass: typo3
 # This is a list of core extensions that should be initially enabled. You can
 # always enable additional core extensions later on if needed.
 #
-# If you are installing TYPO3 7.6 please make sure that non existent extensions
-# like 'rte_ckeditor' are disabled. In TYPO3 7.6 use 'rtehtmlarea' instead.
-#
 typo3_extensions:
   - about
   - belog
@@ -137,7 +129,6 @@ typo3_extensions:
   - reports
   - rsaauth
   - rte_ckeditor
-#  - rtehtmlarea
   - setup
   - t3editor
   - tstemplate

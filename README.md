@@ -83,12 +83,6 @@ If you run `typo3cms` without any parameters you'll get a list of available comm
 
 If you want to clear the TYPO3 cache just run `vendor/bin/typo3cms cache:clear`. This is way more fast than clearing the cache through the TYPO3 backend especially when not logged in.
 
-## What about TYPO3 7.6?
-
-Although this packages is meant to provision TYPO3 8.7 it should also be possible provisioning an earlier TYPO3 version like 7.6. Please bear in mind that this feature has not yet been fully tested so there is no 100% guarantee that this will work.
-
-Please check the comments in the provisioning configuration for additional information on how to set up this package to provision TYPO3 7.6.
-
 ## PHP Version
 
 By default PHP 7.1 is installed/used on the virtual machine. You can however customize the installed PHP version by changing the list of installed packages and set the correct PHP version in the provisioning configuration.
