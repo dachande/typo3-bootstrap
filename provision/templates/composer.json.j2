@@ -1,20 +1,28 @@
 {
+	"name": "{{ t3bs.base_package }}",
+	"description": "{{ t3bs.base_description }}",
+	"license": "{{ t3bs.base_license }}",
+  "type": "{{ t3bs.base_type }}",
 	"repositories": [
 		{
 			"type": "composer",
 			"url": "https://composer.typo3.org/"
 		}
 	],
-	"name": "{{ t3bs.base_package }}",
-	"description": "{{ t3bs.base_description }}",
-	"license": "{{ t3bs.base_license }}",
-  "type": "{{ t3bs.base_type }}",
-	"require": {
-		"typo3/cms": "{{ t3bs.typo3_version }}"
+  "require":{
+    "helhum/typo3-console": "^5.2"
+  },
+  "scripts":{
+		"typo3-cms-scripts": [
+			"typo3cms install:fixfolderstructure",
+			"typo3cms install:generatepackagestates"
+		],
+		"post-autoload-dump": [
+			"@typo3-cms-scripts"
+		]
 	},
 	"extra": {
 		"typo3/cms": {
-			"cms-package-dir": "{$vendor-dir}/typo3/cms",
 			"web-dir": "web"
 		}
 	}

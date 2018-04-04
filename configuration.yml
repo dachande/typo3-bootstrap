@@ -280,8 +280,8 @@ composer: []
 #
 # Additional composer packages to install
 #
-composer_packages:
-  - {composer_package: helhum/typo3-console, constraint: ~}
+composer_packages: []
+  # - {composer_package: helhum/typo3-console, constraint: ~}
 
 #
 # PHP version to use.

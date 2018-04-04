@@ -287,26 +287,19 @@
     chdir: "{{ t3bs.document_root }}/{{ t3bs.project_folder }}"
   with_items: "{{ t3bs.composer }}"
 
-- name: Disable TYPO3 console extension dummy warning
-  become: yes
-  become_user: "{{ t3bs.www_user }}"
-  shell: "{{ t3bs.composer_bin_path }}/{{ t3bs.composer_bin }} config extra.helhum/typo3-console.install-extension-dummy 0"
-  args:
-    chdir: "{{ t3bs.document_root }}/{{ t3bs.project_folder }}"
-
 - name: Check for existing composer.lock file
   stat:
     path: "{{ t3bs.document_root }}/{{ t3bs.project_folder }}/composer.lock"
   register: composer_lock_file
 
-- name: Install/Update dependencies for TYPO3 project
+- name: Install basic dependencies for TYPO3 project
   become: yes
   become_user: "{{ t3bs.www_user }}"
   shell: "{{ t3bs.composer_bin_path }}/{{ t3bs.composer_bin }} install --prefer-dist"
   args:
     chdir: "{{ t3bs.document_root }}/{{ t3bs.project_folder }}"
 
-- name: Install/Update additional composer packages
+- name: Install additional composer packages
   become: yes
   become_user: "{{ t3bs.www_user }}"
   shell: "{{ t3bs.composer_bin_path }}/{{ t3bs.composer_bin }} require {{ item.composer_package }} {{ item.constraint }}"
@@ -315,7 +308,16 @@
   with_items: "{{ t3bs.composer_packages }}"
   when: composer_lock_file.stat.exists == false
 
-- name: Install/Update TYPO3 community packages
+- name: Install TYPO3 core extensions
+  become: yes
+  become_user: "{{ t3bs.www_user }}"
+  shell: "{{ t3bs.composer_bin_path }}/{{ t3bs.composer_bin }} require typo3/cms-{{ item | regex_replace('_', '-') }} {{ t3bs.typo3_version }}"
+  args:
+    chdir: "{{ t3bs.document_root}}/{{ t3bs.project_folder}}"
+  with_items: "{{ t3bs.typo3_extensions }}"
+  # when: composer_lock_file.stat.exists == false
+
+- name: Install TYPO3 community packages
   become: yes
   become_user: "{{ t3bs.www_user }}"
   shell: "{{ t3bs.composer_bin_path }}/{{ t3bs.composer_bin }} require {{ item.composer_package }} {{ item.constraint }}"
@@ -388,10 +390,9 @@
 - name: Install default htaccess
   become: yes
   become_user: "{{ t3bs.www_user }}"
-  copy:
-    remote_src: true
-    src: "{{ t3bs.document_root}}/{{ t3bs.project_folder }}/vendor/typo3/cms/_.htaccess"
-    dest: "{{ t3bs.document_root}}/{{ t3bs.project_folder }}/web/.htaccess"
+  template:
+    src: ../templates/htaccess.j2
+    dest: "{{ t3bs.document_root }}/{{ t3bs.project_folder }}/web/.htaccess"
     mode: 0644
     force: "{{ t3bs.replace_htaccess }}"
 
