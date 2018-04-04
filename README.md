@@ -13,7 +13,7 @@ This package is using [bento/ubuntu-16.04](https://app.vagrantup.com/bento/boxes
 * GraphicsMagick 1.3
 * MailHog 1.0.0
 * PhpMyAdmin 4.5.4
-* Node.js 6.x
+* Node.js 8.x
 
 ## Requirements
 
