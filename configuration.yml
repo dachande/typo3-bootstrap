@@ -88,6 +88,7 @@ typo3_site_name: TYPO3 Bootstrap
 base_package: dachande/typo3-bootstrap
 base_description: TYPO3 CMS Base Distribution
 base_license: GPL-2.0+
+base_type: project
 
 #
 # TYPO3 Admin User
