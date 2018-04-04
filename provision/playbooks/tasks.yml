@@ -373,7 +373,7 @@
 - name: Run TYPO3 setup routine
   become: yes
   become_user: "{{ t3bs.www_user }}"
-  shell: vendor/bin/typo3cms install:setup --force --non-interactive --database-user-name '{{ t3bs.db_user }}' --database-user-password '{{ t3bs.db_pass }}' --database-host-name '{{ t3bs.db_host }}' --database-name '{{ t3bs.db_name }}' --use-existing-database --admin-user-name '{{ t3bs.typo3_admin_user }}' --admin-password '{{ t3bs.typo3_admin_pass}}' --site-name '{{ t3bs.typo3_site_name}}'
+  shell: vendor/bin/typo3cms install:setup --force --no-interaction --database-user-name '{{ t3bs.db_user }}' --database-user-password '{{ t3bs.db_pass }}' --database-host-name '{{ t3bs.db_host }}' --database-name '{{ t3bs.db_name }}' --use-existing-database --admin-user-name '{{ t3bs.typo3_admin_user }}' --admin-password '{{ t3bs.typo3_admin_pass}}' --site-name '{{ t3bs.typo3_site_name}}'
   args:
     chdir: "{{ t3bs.document_root}}/{{ t3bs.project_folder}}"
 
