@@ -299,23 +299,43 @@
   args:
     chdir: "{{ t3bs.document_root }}/{{ t3bs.project_folder }}"
 
+# - name: Install additional composer packages
+#   become: yes
+#   become_user: "{{ t3bs.www_user }}"
+#   shell: "{{ t3bs.composer_bin_path }}/{{ t3bs.composer_bin }} require {{ item.composer_package }} {{ item.constraint }}"
+#   args:
+#     chdir: "{{ t3bs.document_root }}/{{ t3bs.project_folder }}"
+#   with_items: "{{ t3bs.composer_packages }}"
+#   when: composer_lock_file.stat.exists == false
+
 - name: Install additional composer packages
   become: yes
   become_user: "{{ t3bs.www_user }}"
-  shell: "{{ t3bs.composer_bin_path }}/{{ t3bs.composer_bin }} require {{ item.composer_package }} {{ item.constraint }}"
-  args:
-    chdir: "{{ t3bs.document_root }}/{{ t3bs.project_folder }}"
+  composer:
+    command: require
+    working_dir: "{{ t3bs.document_root }}/{{ t3bs.project_folder }}"
+    arguments: "{{ item.composer_package }} {{ item.constraint }}"
   with_items: "{{ t3bs.composer_packages }}"
   when: composer_lock_file.stat.exists == false
+
+  # - name: Install TYPO3 core extensions
+  # become: yes
+  # become_user: "{{ t3bs.www_user }}"
+  # shell: "{{ t3bs.composer_bin_path }}/{{ t3bs.composer_bin }} require typo3/cms-{{ item | regex_replace('_', '-') }} {{ t3bs.typo3_version }}"
+  # args:
+  #   chdir: "{{ t3bs.document_root}}/{{ t3bs.project_folder}}"
+  # with_items: "{{ t3bs.typo3_extensions }}"
+  # when: composer_lock_file.stat.exists == false
 
 - name: Install TYPO3 core extensions
   become: yes
   become_user: "{{ t3bs.www_user }}"
-  shell: "{{ t3bs.composer_bin_path }}/{{ t3bs.composer_bin }} require typo3/cms-{{ item | regex_replace('_', '-') }} {{ t3bs.typo3_version }}"
-  args:
-    chdir: "{{ t3bs.document_root}}/{{ t3bs.project_folder}}"
+  composer:
+    command: require
+    working_dir: "{{ t3bs.document_root}}/{{ t3bs.project_folder}}"
+    arguments: typo3/cms-{{ item | regex_replace('_', '-') }} {{ t3bs.typo3_version }}
   with_items: "{{ t3bs.typo3_extensions }}"
-  # when: composer_lock_file.stat.exists == false
+  when: composer_lock_file.stat.exists == false
 
 - name: Install TYPO3 community packages
   become: yes
@@ -375,7 +395,7 @@
 - name: Run TYPO3 setup routine
   become: yes
   become_user: "{{ t3bs.www_user }}"
-  shell: vendor/bin/typo3cms install:setup --force --no-interaction --database-user-name '{{ t3bs.db_user }}' --database-user-password '{{ t3bs.db_pass }}' --database-host-name '{{ t3bs.db_host }}' --database-name '{{ t3bs.db_name }}' --use-existing-database --admin-user-name '{{ t3bs.typo3_admin_user }}' --admin-password '{{ t3bs.typo3_admin_pass}}' --site-name '{{ t3bs.typo3_site_name}}'
+  shell: vendor/bin/typo3cms install:setup --force --no-interaction --skip-extension-setup --use-existing-database --database-user-name '{{ t3bs.db_user }}' --database-user-password '{{ t3bs.db_pass }}' --database-host-name '{{ t3bs.db_host }}' --database-name '{{ t3bs.db_name }}' --admin-user-name '{{ t3bs.typo3_admin_user }}' --admin-password '{{ t3bs.typo3_admin_pass}}' --site-name '{{ t3bs.typo3_site_name}}'
   args:
     chdir: "{{ t3bs.document_root}}/{{ t3bs.project_folder}}"
 
@@ -396,21 +416,35 @@
     mode: 0644
     force: "{{ t3bs.replace_htaccess }}"
 
-- name: Activate TYPO3 core extensions
-  become: yes
-  become_user: "{{ t3bs.www_user }}"
-  shell: vendor/bin/typo3cms extension:activate {{ item }}
-  args:
-    chdir: "{{ t3bs.document_root}}/{{ t3bs.project_folder}}"
-  with_items: "{{ t3bs.typo3_extensions }}"
+# - name: Activate TYPO3 core extensions
+#   become: yes
+#   become_user: "{{ t3bs.www_user }}"
+#   shell: vendor/bin/typo3cms extension:activate {{ item }}
+#   args:
+#     chdir: "{{ t3bs.document_root}}/{{ t3bs.project_folder}}"
+#   with_items: "{{ t3bs.typo3_extensions }}"
 
-- name: Activate community extensions
+# - name: Activate community extensions
+#   become: yes
+#   become_user: "{{ t3bs.www_user }}"
+#   shell: vendor/bin/typo3cms extension:activate {{ item.extension_key }}
+#   args:
+#     chdir: "{{ t3bs.document_root}}/{{ t3bs.project_folder}}"
+#   with_items: "{{ t3bs.typo3_community_extensions }}"
+
+- name: Activate extensions
   become: yes
   become_user: "{{ t3bs.www_user }}"
-  shell: vendor/bin/typo3cms extension:activate {{ item.extension_key }}
+  shell: vendor/bin/typo3cms install:generatepackagestates --framework-extensions {{ t3bs.typo3_extensions|join(',') }} --excluded-extensions {{ t3bs.typo3_extension_exclude|join(',') }}
   args:
     chdir: "{{ t3bs.document_root}}/{{ t3bs.project_folder}}"
-  with_items: "{{ t3bs.typo3_community_extensions }}"
+
+- name: Setup active extensions
+  become: yes
+  become_user: "{{ t3bs.www_user }}"
+  shell: vendor/bin/typo3cms extension:setupactive
+  args:
+    chdir: "{{ t3bs.document_root}}/{{ t3bs.project_folder}}"
 
 - name: Download extension translations
   become: yes

@@ -109,10 +109,14 @@ db_user: typo3
 db_pass: typo3
 
 #
-# TYPO3 core extensions to be enabled.
+# TYPO3 core extensions to be activated.
 #
-# This is a list of core extensions that should be initially enabled. You can
-# always enable additional core extensions later on if needed.
+# This is a list of core extensions that should be initially activated. You can
+# always enable additional core extensions later through the extension manager
+# if needed.
+#
+# You don't have to mention any core extensions that will be required to run a
+# minimal system. These extension will always be installed and avtivated.
 #
 typo3_extensions:
   - about
@@ -129,6 +133,7 @@ typo3_extensions:
   - reports
   - rsaauth
   - rte_ckeditor
+  - scheduler
   - setup
   - t3editor
   - tstemplate
@@ -136,7 +141,7 @@ typo3_extensions:
   - wizard_sortpages
 
 #
-# TYPO3 community extensions to be installed/enabled
+# TYPO3 community extensions to be installed/activated
 #
 # This list contains all community extensions that will be downloaded, installed
 # and automatically activated. If you want to install a package deviating from
@@ -147,8 +152,6 @@ typo3_extensions:
 # For demonstration purposes the typo3/cms-introduction package ist also
 # installed. If you want to start a new project you should remove that package
 # from this list before provisioning.
-#
-# If a
 #
 typo3_community_extensions:
   - {composer_package: dmitryd/typo3-realurl, extension_key: realurl, constraint: ~}
@@ -165,6 +168,15 @@ typo3_community_extensions:
   # - {composer_package: clickstorm/go_maps_ext, extension_key: go_maps_ext, constraint: ~}
   # - {composer_package: namelesscoder/inline-page-editing, extension_key: inline_page_editing, constraint: dev-master}
   - {composer_package: friendsoftypo3/extension-builder, extension_key: extension_builder, constraint: ~}
+
+#
+# TYPO3 extension that should not initially be activated
+#
+# While provisioning the virtual machine all community extensions that were installed
+# will be activated by default. To prevent some extensions from being activated
+# you can mention the extension key here.
+#
+typo3_extension_exclude: []
 
 #
 # TYPO3 Mail configuration
