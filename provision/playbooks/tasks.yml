@@ -292,59 +292,42 @@
     path: "{{ t3bs.document_root }}/{{ t3bs.project_folder }}/composer.lock"
   register: composer_lock_file
 
-- name: Install basic dependencies for TYPO3 project
-  become: yes
-  become_user: "{{ t3bs.www_user }}"
-  shell: "{{ t3bs.composer_bin_path }}/{{ t3bs.composer_bin }} install --prefer-dist"
-  args:
-    chdir: "{{ t3bs.document_root }}/{{ t3bs.project_folder }}"
-
-# - name: Install additional composer packages
-#   become: yes
-#   become_user: "{{ t3bs.www_user }}"
-#   shell: "{{ t3bs.composer_bin_path }}/{{ t3bs.composer_bin }} require {{ item.composer_package }} {{ item.constraint }}"
-#   args:
-#     chdir: "{{ t3bs.document_root }}/{{ t3bs.project_folder }}"
-#   with_items: "{{ t3bs.composer_packages }}"
-#   when: composer_lock_file.stat.exists == false
-
-- name: Install additional composer packages
+- name: Prepare installation of additional composer packages
   become: yes
   become_user: "{{ t3bs.www_user }}"
   composer:
     command: require
     working_dir: "{{ t3bs.document_root }}/{{ t3bs.project_folder }}"
-    arguments: "{{ item.composer_package }} {{ item.constraint }}"
+    arguments: --no-update -- {{ item.composer_package }} {{ item.constraint }}
   with_items: "{{ t3bs.composer_packages }}"
   when: composer_lock_file.stat.exists == false
 
-  # - name: Install TYPO3 core extensions
-  # become: yes
-  # become_user: "{{ t3bs.www_user }}"
-  # shell: "{{ t3bs.composer_bin_path }}/{{ t3bs.composer_bin }} require typo3/cms-{{ item | regex_replace('_', '-') }} {{ t3bs.typo3_version }}"
-  # args:
-  #   chdir: "{{ t3bs.document_root}}/{{ t3bs.project_folder}}"
-  # with_items: "{{ t3bs.typo3_extensions }}"
-  # when: composer_lock_file.stat.exists == false
-
-- name: Install TYPO3 core extensions
+- name: Prepare installation of TYPO3 core extensions
   become: yes
   become_user: "{{ t3bs.www_user }}"
   composer:
     command: require
     working_dir: "{{ t3bs.document_root}}/{{ t3bs.project_folder}}"
-    arguments: typo3/cms-{{ item | regex_replace('_', '-') }} {{ t3bs.typo3_version }}
+    arguments: --no-update -- typo3/cms-{{ item | regex_replace('_', '-') }} {{ t3bs.typo3_version }}
   with_items: "{{ t3bs.typo3_extensions }}"
   when: composer_lock_file.stat.exists == false
 
-- name: Install TYPO3 community packages
+- name: Prepare installation of TYPO3 community packages
   become: yes
   become_user: "{{ t3bs.www_user }}"
-  shell: "{{ t3bs.composer_bin_path }}/{{ t3bs.composer_bin }} require {{ item.composer_package }} {{ item.constraint }}"
-  args:
-    chdir: "{{ t3bs.document_root }}/{{ t3bs.project_folder }}"
+  composer:
+    command: require
+    working_dir: "{{ t3bs.document_root }}/{{ t3bs.project_folder }}"
+    arguments: --no-update -- {{ item.composer_package }} {{ item.constraint }}
   with_items: "{{ t3bs.typo3_community_extensions }}"
   when: composer_lock_file.stat.exists == false
+
+- name: Install TYPO3 project
+  become: yes
+  become_user: "{{ t3bs.www_user }}"
+  shell: "{{ t3bs.composer_bin_path }}/{{ t3bs.composer_bin }} install --prefer-dist"
+  args:
+    chdir: "{{ t3bs.document_root }}/{{ t3bs.project_folder }}"
 
 - name: Set mysql root password
   mysql_user: name=root host={{ item }} password={{ t3bs.db_root_password }} state=present
@@ -415,22 +398,6 @@
     dest: "{{ t3bs.document_root }}/{{ t3bs.project_folder }}/web/.htaccess"
     mode: 0644
     force: "{{ t3bs.replace_htaccess }}"
-
-# - name: Activate TYPO3 core extensions
-#   become: yes
-#   become_user: "{{ t3bs.www_user }}"
-#   shell: vendor/bin/typo3cms extension:activate {{ item }}
-#   args:
-#     chdir: "{{ t3bs.document_root}}/{{ t3bs.project_folder}}"
-#   with_items: "{{ t3bs.typo3_extensions }}"
-
-# - name: Activate community extensions
-#   become: yes
-#   become_user: "{{ t3bs.www_user }}"
-#   shell: vendor/bin/typo3cms extension:activate {{ item.extension_key }}
-#   args:
-#     chdir: "{{ t3bs.document_root}}/{{ t3bs.project_folder}}"
-#   with_items: "{{ t3bs.typo3_community_extensions }}"
 
 - name: Activate extensions
   become: yes
