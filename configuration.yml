@@ -116,7 +116,11 @@ db_pass: typo3
 # if needed.
 #
 # You don't have to mention any core extensions that will be required to run a
-# minimal system. These extension will always be installed and avtivated.
+# minimal system. These extension will always be installed and activated.
+#
+# You will (for now) however have to mention core extensions here that are
+# a requirement by community extensions. Otherwise you'll get an error message as soon
+# as the extension activation commences.
 #
 typo3_extensions:
   - about
@@ -156,6 +160,8 @@ typo3_extensions:
 typo3_community_extensions:
   - {composer_package: dmitryd/typo3-realurl, extension_key: realurl, constraint: ~}
   - {composer_package: typo3/cms-introduction, extension_key: introduction, constraint: ^3.0}
+  - {composer_package: friendsoftypo3/extension-builder, extension_key: extension_builder, constraint: ~}
+  # - {composer_package: bk2k/bootstrap-package, extension_key: bootstrap_package, constraint: ~}
   # - {composer_package: in2code/powermail, extension_key: powermail, constraint: ~}
   # - {composer_package: in2code/powermail_cond, extension_key: powermail_cond, constraint: ~}
   # - {composer_package: in2code/powermailrecaptcha, extension_key: powermailrecaptcha, constraint: ~}
@@ -166,8 +172,7 @@ typo3_community_extensions:
   # - {composer_package: b13/seo_basics, extension_key: seo_basics, constraint: ~}
   # - {composer_package: gridelementsteam/gridelements, extension_key: gridelements, constraint: ~}
   # - {composer_package: clickstorm/go_maps_ext, extension_key: go_maps_ext, constraint: ~}
-  # - {composer_package: namelesscoder/inline-page-editing, extension_key: inline_page_editing, constraint: dev-master}
-  - {composer_package: friendsoftypo3/extension-builder, extension_key: extension_builder, constraint: ~}
+  # - {composer_package: friendsoftypo3/frontend-editing, extension_key: frontend_editing, constraint: ~}
 
 #
 # TYPO3 extension that should not initially be activated
