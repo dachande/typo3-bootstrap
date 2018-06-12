@@ -4,7 +4,7 @@ COLOR_BROWN="\033[0;33m"
 COLOR_GREEN="\033[1;32m"
 COLOR_NONE="\033[0m"
 
-[ "${t3bs_use_tls}" -eq "true" ] && PROTO="https" || PROTO="http"
+[ "${t3bs_use_tls}" = "true" ] && PROTO="https" || PROTO="http"
 set -e
 
 # Some instructions
