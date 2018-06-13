@@ -70,7 +70,7 @@ To connect to the virtual machine through SSH just enter `vagrant ssh` and you a
 
 ## Post configuration
 
-Modern TYPO3 installations are now shipped with a fanstatic tool to configure most stuff directly on the command line. Just SSH into the virtual machine and let the magic happen:
+This modern TYPO3 installation is shipped with a fanstatic tool to configure important settings of your project directly on the command line. Just SSH into the virtual machine and let the magic happen:
 
 ```
 user@local$ vagrant ssh
@@ -81,13 +81,13 @@ vagrant@vm$ vendor/bin/typo3cms
 
 If you run `typo3cms` without any parameters you'll get a list of available commands. To get additional help for a specific command just use `vendor/bin/typo3cms help <command>`.
 
-If you want to clear the TYPO3 cache just run `vendor/bin/typo3cms cache:clear`. This is way more fast than clearing the cache through the TYPO3 backend especially when not logged in.
+If you want to clear the TYPO3 cache for instance just run `vendor/bin/typo3cms cache:flush`. This way clearing the TYPO3 cache is much quicker than clearing the cache through the TYPO3 backend.
 
 ## PHP Version
 
-By default PHP 7.1 is installed/used on the virtual machine. You can however customize the installed PHP version by changing the list of installed packages and set the correct PHP version in the provisioning configuration.
+By default PHP 7.1 is installed/used on the virtual machine. You can however customize the installed PHP version by changing the PHP version in the provisioning configuration.
 
-If you want to use PHP 7.2 for instance, just change `php_version` to `7.2` and change all occurences of `php7.1` to `php7.2` in the `requirements` section in `configuration.yml`.
+If you want to use PHP 7.2 for instance, just change `php_version` to `7.2` in `configuration.yml`.
 
 ## TLS encryption
 
@@ -106,5 +106,4 @@ Additional information on how to customize your hostname without breaking valida
 
 ## Credits
 
-* The provisioning workflow is loosely based on the provisioning workflow used in the [VCCW](https://github.com/vccw-team/vccw) project.
 * Thanks to [Reizwerk GmbH](https://www.reizwerk.com) allowing me to use some of my work time for package development.
