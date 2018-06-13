@@ -156,7 +156,8 @@ typo3_extensions:
 #
 # For demonstration purposes the typo3/cms-introduction package ist also
 # installed. If you want to start a new project you should remove that package
-# from this list and add the fluid_styled_content core extension before provisioning.
+# from this list and add the fluid_styled_content core extension or the
+# bk2k/bootstrap-package community extension before provisioning.
 #
 # This list also contains some editors' best pick extensions. Just remove the comments
 # to install them.
