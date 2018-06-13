@@ -402,7 +402,7 @@
 - name: Activate extensions
   become: yes
   become_user: "{{ t3bs.www_user }}"
-  shell: vendor/bin/typo3cms install:generatepackagestates --framework-extensions {{ t3bs.typo3_extensions|join(',') }} --excluded-extensions {{ t3bs.typo3_extension_exclude|join(',') }}
+  shell: vendor/bin/typo3cms install:generatepackagestates --excluded-extensions {{ t3bs.typo3_extension_exclude|join(',') }}
   args:
     chdir: "{{ t3bs.document_root}}/{{ t3bs.project_folder}}"
 
