@@ -109,24 +109,26 @@ db_user: typo3
 db_pass: typo3
 
 #
-# TYPO3 core extensions to be activated.
+# Additional TYPO3 core extensions
 #
-# This is a list of core extensions that should be initially activated. You can
-# always enable additional core extensions later through the extension manager
-# if needed.
+# Besides of the core extensions that are automatically installed for a minimal system
+# you can also specify additional core extensions here that will be installed and
+# activated on provisioning.
 #
-# You don't have to mention any core extensions that will be required to run a
-# minimal system. These extension will always be installed and activated.
+# If you want to install additional core extensions later you'll have to add them to this
+# list and additionally require them by running composer with the following command inside
+# the virtual machine in the folder /var/www/your-typo3-project-folder:
 #
-# You will (for now) however have to mention core extensions here that are
-# a requirement by community extensions. Otherwise you'll get an error message as soon
-# as the extension activation commences.
+# composer require typo3/cms-extensionname "*"
+#
+# The extension will automatically be activated after the composer command has finished
+# installing the extension.
 #
 typo3_extensions:
   - about
   - belog
   - beuser
-  - fluid_styled_content
+  # - fluid_styled_content
   - form
   - func
   - impexp
@@ -137,7 +139,6 @@ typo3_extensions:
   - reports
   - rsaauth
   - rte_ckeditor
-  - scheduler
   - setup
   - t3editor
   - tstemplate
@@ -155,30 +156,34 @@ typo3_extensions:
 #
 # For demonstration purposes the typo3/cms-introduction package ist also
 # installed. If you want to start a new project you should remove that package
-# from this list before provisioning.
+# from this list and add the fluid_styled_content core extension before provisioning.
+#
+# This list also contains some editors' best pick extensions. Just remove the comments
+# to install them.
 #
 typo3_community_extensions:
   - {composer_package: dmitryd/typo3-realurl, extension_key: realurl, constraint: ~}
   - {composer_package: typo3/cms-introduction, extension_key: introduction, constraint: ^3.0}
-  - {composer_package: friendsoftypo3/extension-builder, extension_key: extension_builder, constraint: ~}
+  # - {composer_package: arminvieweg/dce, extension_key: dce, constraint: ~}
+  # - {composer_package: clickstorm/go_maps_ext, extension_key: go_maps_ext, constraint: ~}
+  # - {composer_package: b13/seo_basics, extension_key: seo_basics, constraint: ~}
   # - {composer_package: bk2k/bootstrap-package, extension_key: bootstrap_package, constraint: ~}
+  # - {composer_package: fluidtypo3/vhs, extension_key: vhs, constraint: ~}
+  # - {composer_package: friendsoftypo3/extension-builder, extension_key: extension_builder, constraint: ~}
+  # - {composer_package: friendsoftypo3/frontend-editing, extension_key: frontend_editing, constraint: ~}
+  # - {composer_package: georgringer/news, extension_key: news, constraint: ~}
+  # - {composer_package: gridelementsteam/gridelements, extension_key: gridelements, constraint: ~}
   # - {composer_package: in2code/powermail, extension_key: powermail, constraint: ~}
   # - {composer_package: in2code/powermail_cond, extension_key: powermail_cond, constraint: ~}
   # - {composer_package: in2code/powermailrecaptcha, extension_key: powermailrecaptcha, constraint: ~}
   # - {composer_package: in2code/femanager, extension_key: femanager, constraint: ~}
-  # - {composer_package: fluidtypo3/vhs, extension_key: vhs, constraint: ~}
-  # - {composer_package: arminvieweg/dce, extension_key: dce, constraint: ~}
-  # - {composer_package: georgringer/news, extension_key: news, constraint: ~}
-  # - {composer_package: b13/seo_basics, extension_key: seo_basics, constraint: ~}
-  # - {composer_package: gridelementsteam/gridelements, extension_key: gridelements, constraint: ~}
-  # - {composer_package: clickstorm/go_maps_ext, extension_key: go_maps_ext, constraint: ~}
-  # - {composer_package: friendsoftypo3/frontend-editing, extension_key: frontend_editing, constraint: ~}
+  # - {composer_package: netresearch/rte-ckeditor-image, extension_key: rte_ckeditor_image, constraint: ~}
 
 #
-# TYPO3 extension that should not initially be activated
+# TYPO3 community extensions that should not be activated
 #
-# While provisioning the virtual machine all community extensions that were installed
-# will be activated by default. To prevent some extensions from being activated
+# While provisioning the virtual machine all community extensions that are installed
+# will also be activated by default. To prevent extensions from being activated
 # you can mention the extension key here.
 #
 typo3_extension_exclude: []
