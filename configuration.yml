@@ -308,7 +308,7 @@ composer_packages: []
 #
 # PHP version to use.
 #
-php_version: 7.1
+php_version: "7.1"
 
 #
 # PHP settings
@@ -357,18 +357,18 @@ requirements:
   - git
   - golang-go
   - graphicsmagick
-  - libapache2-mod-php7.1
+  - libapache2-mod-php#PHPVER#
   - mariadb-server
-  - php7.1
-  - php7.1-curl
-  - php7.1-gd
-  - php7.1-intl
-  - php7.1-mbstring
-  - php7.1-mcrypt
-  - php7.1-mysql
-  - php7.1-soap
-  - php7.1-xml
-  - php7.1-zip
+  - php#PHPVER#
+  - php#PHPVER#-curl
+  - php#PHPVER#-gd
+  - php#PHPVER#-intl
+  - php#PHPVER#-mbstring
+  - php#PHPVER#-mcrypt
+  - php#PHPVER#-mysql
+  - php#PHPVER#-soap
+  - php#PHPVER#-xml
+  - php#PHPVER#-zip
   - phpmyadmin
   - pwgen
   - unzip

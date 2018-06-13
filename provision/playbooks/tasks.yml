@@ -27,12 +27,12 @@
   apt:
      autoremove: yes
 
-- name: Add PHP 7.1 PPA
+- name: Add PHP PPA
   apt_repository:
     repo: 'ppa:ondrej/php'
 
 - name: Install required packages
-  apt: name={{ item }} state=present
+  apt: name={{ item | regex_replace('#PHPVER#', t3bs.php_version) }} state=present
   with_items: "{{ t3bs.requirements }}"
 
 - name: Create custom CA certificate directory
