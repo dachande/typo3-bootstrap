@@ -1,12 +1,11 @@
 ---
 - name: Update OS packages
   apt:
-    name: "{{ item }}"
+    name:
+      - aptitude
+      - python-mysqldb
     update_cache: yes
     state: present
-  with_items:
-    - aptitude
-    - python-mysqldb
 
 - name: Generate locales
   command: locale-gen {{ item }}
@@ -32,8 +31,7 @@
     repo: 'ppa:ondrej/php'
 
 - name: Install required packages
-  apt: name={{ item | regex_replace('#PHPVER#', t3bs.php_version) }} state=present
-  with_items: "{{ t3bs.requirements }}"
+  apt: name={{ t3bs.requirements | regex_replace('#PHPVER#', t3bs.php_version) }} state=present
 
 - name: Create custom CA certificate directory
   file:
