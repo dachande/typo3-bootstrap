@@ -187,7 +187,7 @@
 - name: Enable xdebug (apache)
   file:
     src:  /etc/php/{{ t3bs.php_version }}/mods-available/xdebug.ini
-    dest: /etc/php/{{ t3bs.php_version }}/apache/conf.d/20-xdebug.ini
+    dest: /etc/php/{{ t3bs.php_version }}/apache2/conf.d/20-xdebug.ini
     state: link
 
 - name: Enable xdebug (cli)
