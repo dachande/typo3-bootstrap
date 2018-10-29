@@ -178,6 +178,24 @@
     backup: yes
   with_items: "{{ t3bs.php_ini_cli }}"
 
+- name: Add xdebug configuration file
+  template:
+    src: ../templates/xdebug.ini.j2
+    dest: /etc/php/{{ t3bs.php_version }}/mods-available/xdebug.ini
+    mode: 0644
+
+- name: Enable xdebug (apache)
+  file:
+    src:  /etc/php/{{ t3bs.php_version }}/mods-available/xdebug.ini
+    dest: /etc/php/{{ t3bs.php_version }}/apache/conf.d/20-xdebug.ini
+    state: link
+
+- name: Enable xdebug (cli)
+  file:
+    src:  /etc/php/{{ t3bs.php_version }}/mods-available/xdebug.ini
+    dest: /etc/php/{{ t3bs.php_version }}/cli/conf.d/20-xdebug.ini
+    state: link
+
 - name: Download composer
   get_url:
     url: https://getcomposer.org/installer

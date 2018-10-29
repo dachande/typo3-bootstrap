@@ -328,6 +328,38 @@ php_ini_cli:
   - {section: Date, option: date.timezone, value: Europe/Berlin}
 
 #
+# Xdebug remote_host
+#
+# Set the remote host for your xdebug session. This is the (gateway) IP address of
+# the host machine seen by the guest VM. In a default virtualbox environment this
+# should be 10.0.2.2 so normally you won't have to change this value unless your
+# virtualbox configuration has changed.
+#
+xdebug_remote_host: 10.0.2.2
+
+#
+# Xdebug remote_port
+#
+# The default port is 9000. If you have changed this port in your IDE make sure
+# the correct port is set here as well.
+#
+xdebug_remote_port: 9000
+
+#
+# Xdebug idekey
+#
+xdebug_idekey: vscode
+
+#
+# Xdebug max_nesting_level
+#
+# Controls the protection mechanism for infinite recursion protection.
+# The value of this setting is the maximum level of nested functions that are
+# allowed before the script will be aborted.
+#
+xdebug_max_nesting_level: 512
+
+#
 # Install nodejs
 #
 install_nodejs: "yes"
@@ -370,6 +402,7 @@ requirements:
   - php#PHPVER#-soap
   - php#PHPVER#-xml
   - php#PHPVER#-zip
+  - php-xdebug
   - phpmyadmin
   - pwgen
   - unzip
