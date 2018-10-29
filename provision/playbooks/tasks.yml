@@ -30,7 +30,7 @@
   apt_repository:
     repo: 'ppa:ondrej/php'
 
-- name: Install required packages
+- name: Install required OS packages
   apt: name={{ t3bs.requirements | regex_replace('#PHPVER#', t3bs.php_version) }} state=present
 
 - name: Create custom CA certificate directory
@@ -338,7 +338,7 @@
   with_items: "{{ t3bs.typo3_community_extensions }}"
   when: composer_lock_file.stat.exists == false
 
-- name: Install TYPO3 project
+- name: Install TYPO3 project (this may take a while)
   become: yes
   become_user: "{{ t3bs.www_user }}"
   shell: "{{ t3bs.composer_bin_path }}/{{ t3bs.composer_bin }} install --prefer-dist"
