@@ -98,11 +98,16 @@ If you run `typo3cms` without any parameters you'll get a list of available comm
 
 If you want to clear the TYPO3 cache for instance just run `vendor/bin/typo3cms cache:flush`. This way clearing the TYPO3 cache is much quicker than clearing the cache through the TYPO3 backend.
 
-## PHP Version
+## PHP
 
+### Version setting
 By default PHP 7.1 is installed/used on the virtual machine. You can however customize the installed PHP version by changing the PHP version in the provisioning configuration.
 
 If you want to use PHP 7.2 for instance, just change `php_version` to `7.2` in `configuration.yml`. Please also make sure that you comment out the `php-mcrypt` package installation as mcrypt is no longer available in PHP 7.2 and above.
+
+### Debugging and Profiling
+
+With this package it is possible to debug your PHP code using Xdebug. Xdebug is an extension for PHP to assist with debugging and development and is automatically installed during the provisioning process. The package also comes with a default working debugger configuration for Visual Studio Code but it should be no problem to create a working configuration for another IDE of your choice.
 
 ## TLS encryption
 
