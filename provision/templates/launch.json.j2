@@ -1,0 +1,14 @@
+{
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"name": "Listen for XDebug",
+			"type": "php",
+			"request": "launch",
+			"port": {{ t3bs.xdebug_remote_port }},
+			"pathMappings": {
+				"{{ t3bs.document_root }}/{{ t3bs.project_folder }}/": "${workspaceFolder}/site/{{ t3bs.project_folder }}/"
+			}
+		}
+	],
+}
