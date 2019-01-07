@@ -328,36 +328,49 @@ php_ini_cli:
   - {section: Date, option: date.timezone, value: Europe/Berlin}
 
 #
-# Xdebug remote_host
+# Xdebug configuration
 #
-# Set the remote host for your xdebug session. This is the (gateway) IP address of
-# the host machine seen by the guest VM. In a default virtualbox environment this
-# should be 10.0.2.2 so normally you won't have to change this value unless your
-# virtualbox configuration has changed.
-#
-xdebug_remote_host: 10.0.2.2
+xdebug:
+  debugger:
+    # Enable/disable Xdebug debugger component
+    enable: 1
 
-#
-# Xdebug remote_port
-#
-# The default port is 9000. If you have changed this port in your IDE make sure
-# the correct port is set here as well.
-#
-xdebug_remote_port: 9000
+    # Set this to 1 if you don't want to use a browser plugin to dynamically enable/disable debugging
+    autostart: 0
 
-#
-# Xdebug idekey
-#
-xdebug_idekey: vscode
+    # Remote host for your xdebug session. This is the (gateway) IP address of
+    # the host machine seen by the guest VM. In a default virtualbox environment this
+    # should be 10.0.2.2 so normally you won't have to change this value unless your
+    # virtualbox configuration has changed.
+    remote_host: 10.0.2.2
 
-#
-# Xdebug max_nesting_level
-#
-# Controls the protection mechanism for infinite recursion protection.
-# The value of this setting is the maximum level of nested functions that are
-# allowed before the script will be aborted.
-#
-xdebug_max_nesting_level: 512
+    # Port of your debugging client. This should normally stay at the default setting (9000)
+    remote_port: 9000
+
+    # The IDE key that should be used when connecting to the Xdebug client
+    idekey: vscode
+
+    # Controls the protection mechanism for infinite recursion protection.
+    # The value of this setting is the maximum level of nested functions that are
+    # allowed before the script will be aborted.
+    max_nesting_level: 512
+
+  profiler:
+    # Enable/disable Xdebug profiler component. If you use the enable_trigger feature (see below)
+    # this option should be set to 0. Otherwise the profiler will generate profile files for each request.
+    enable: 0
+
+    # Output directory for profiler cachgrind file.
+    output_dir: /vargrant/profiler
+
+    # Filename of the profiler cachegrind output file
+    output_name: xdebug.out.%t
+
+    # When this setting is set to 1, you can trigger the generation of profiler files by using
+    # the XDEBUG_PROFILE GET/POST parameter, or set a cookie with the name XDEBUG_PROFILE.
+    # This will then write the profiler data. In order to prevent the profiler to generate profile
+    # files for each request, you need to set 'enable' to 0 (see above).
+    enable_trigger: 1
 
 #
 # Install nodejs
@@ -426,3 +439,4 @@ mailhog_folder: /opt/mailhog
 composer_bin_path: /usr/local/bin
 composer_bin: composer
 php_bin_path: /usr/bin
+xdebug_profiler_output_dir: /vargrant/profiler
