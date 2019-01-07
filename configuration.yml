@@ -72,7 +72,7 @@ use_tls: true
 # Do not attempt to install TYPO3 below 8.7 as it will most likely fail as TYPO3 7.6 support
 # has been dropped.
 #
-typo3_version: ^8.7
+typo3_version: ^9.5
 typo3_site_name: TYPO3 Bootstrap
 
 #
@@ -124,26 +124,26 @@ db_pass: typo3
 # The extension will automatically be activated after the composer command has finished
 # installing the extension.
 #
-typo3_extensions:
-  - about
-  - belog
-  - beuser
+typo3_extensions: []
+  # - about
+  # - belog
+  # - beuser
   # - fluid_styled_content
-  - form
-  - func
-  - impexp
-  - info
-  - info_pagetsconfig
-  - lowlevel
-  - recycler
-  - reports
-  - rsaauth
-  - rte_ckeditor
-  - setup
-  - t3editor
-  - tstemplate
-  - wizard_crpages
-  - wizard_sortpages
+  # - form
+  # - func
+  # - impexp
+  # - info
+  # - info_pagetsconfig
+  # - lowlevel
+  # - recycler
+  # - reports
+  # - rsaauth
+  # - rte_ckeditor
+  # - setup
+  # - t3editor
+  # - tstemplate
+  # - wizard_crpages
+  # - wizard_sortpages
 
 #
 # TYPO3 community extensions to be installed/activated
@@ -163,8 +163,7 @@ typo3_extensions:
 # to install them.
 #
 typo3_community_extensions:
-  - {composer_package: dmitryd/typo3-realurl, extension_key: realurl, constraint: ~}
-  - {composer_package: typo3/cms-introduction, extension_key: introduction, constraint: ^3.0}
+  - {composer_package: typo3/cms-introduction, extension_key: introduction, constraint: ~}
   # - {composer_package: arminvieweg/dce, extension_key: dce, constraint: ~}
   # - {composer_package: clickstorm/go_maps_ext, extension_key: go_maps_ext, constraint: ~}
   # - {composer_package: b13/seo_basics, extension_key: seo_basics, constraint: ~}
@@ -229,15 +228,6 @@ typo3_mail_use_mailhog: true
 # These translations will be downloaded and put in the typo3conf/l10n directory.
 #
 typo3_translations:
-  - en
-  - de
-
-#
-# Enables languages
-#
-# Notice: Language 'en' is enabled by default and doesn't need to be enabled here.
-#
-typo3_languages:
   - de
 
 #
@@ -253,8 +243,6 @@ typo3_configuration:
   - {key: FE/debug, value: 1}
   - {key: SYS/devIPmask, value: \*}
   - {key: SYS/displayErrors, value: 1}
-  - {key: SYS/enableDeprecationLog, value: file}
-  - {key: SYS/sqlDebug, value: 1}
   - {key: SYS/systemLogLevel, value: 0}
   - {key: SYS/exceptionalErrors, value: 28674}
 
@@ -309,7 +297,7 @@ composer_packages: []
 #
 # PHP version to use.
 #
-php_version: "7.1"
+php_version: "7.2"
 
 #
 # PHP settings
@@ -410,7 +398,6 @@ requirements:
   - php#PHPVER#-gd
   - php#PHPVER#-intl
   - php#PHPVER#-mbstring
-  - php#PHPVER#-mcrypt
   - php#PHPVER#-mysql
   - php#PHPVER#-soap
   - php#PHPVER#-xml
