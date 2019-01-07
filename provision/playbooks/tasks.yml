@@ -183,6 +183,19 @@
     src: ../templates/xdebug.ini.j2
     dest: /etc/php/{{ t3bs.php_version }}/mods-available/xdebug.ini
     mode: 0644
+    force: no
+
+- name: Create xdebug IDE configuration directory
+  file:
+    path: /vagrant/.vscode
+    state: directory
+
+- name: Add xdebug IDE configuration file
+  template:
+    src: ../templates/launch.json.j2
+    dest: /vagrant/.vscode/launch.json
+    mode: 0644
+    force: no
 
 - name: Enable xdebug (apache)
   file:
