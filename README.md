@@ -4,12 +4,12 @@ Fully automated provisioning of a virtual machine for TYPO3 website development 
 
 ## Contents
 
-This package is using [bento/ubuntu-16.04](https://app.vagrantup.com/bento/boxes/ubuntu-16.04) as its Vagrant base box. The provisioned virtual machine will have the following features installed:
+This package is using [bento/ubuntu-18.04](https://app.vagrantup.com/bento/boxes/ubuntu-18.04) as its Vagrant base box. The provisioned virtual machine will have the following features installed:
 
-* TYPO3 8.7
+* TYPO3 9.5
 * Apache 2.4
 * MariaDB 10.0
-* PHP 7.1 (customizable)
+* PHP 7.2 (customizable)
 * GraphicsMagick 1.3
 * MailHog 1.0.0
 * PhpMyAdmin 4.5.4
@@ -23,7 +23,6 @@ The following additional PHP modules are installed
 * GD
 * Intl
 * Mbstring
-* Mcrypt (not available in PHP 7.2 and above)
 * Mysql
 * Soap
 * Xdebug
@@ -34,8 +33,8 @@ The following additional PHP modules are installed
 
 * A Linux or MacOS machine (not tested on Windows)
 * Oracle VirtualBox
-* Vagrant 2.0+
-* Ansible
+* Vagrant >= 2.1.2
+* Ansible >= 2.0
 
 ## Optional dependencies
 
@@ -101,9 +100,9 @@ If you want to clear the TYPO3 cache for instance just run `vendor/bin/typo3cms 
 ## PHP
 
 ### Version setting
-By default PHP 7.1 is installed/used on the virtual machine. You can however customize the installed PHP version by changing the PHP version in the provisioning configuration.
+By default PHP 7.2 is installed/used on the virtual machine. You can however customize the installed PHP version by changing the PHP version in the provisioning configuration.
 
-If you want to use PHP 7.2 for instance, just change `php_version` to `7.2` in `configuration.yml`. Please also make sure that you comment out the `php-mcrypt` package installation as mcrypt is no longer available in PHP 7.2 and above.
+If you want to use PHP 7.3 for instance, just change `php_version` to `7.3` in `configuration.yml`.
 
 ### Debugging and Profiling
 
