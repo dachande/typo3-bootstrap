@@ -11,7 +11,7 @@
 # predefined ansible tasks are optimized for Ubuntu and may fail when using a
 # base box other than a Ubuntu box.
 #
-box: bento/ubuntu-16.04
+box: bento/ubuntu-18.04
 server_admin: d.schultheis@kabel-salat.net
 
 #
