@@ -443,15 +443,6 @@
     dest: "{{ t3bs.document_root}}/{{ t3bs.project_folder }}/web/robots.txt"
     mode: 0644
 
-- name: Install default htaccess
-  become: yes
-  become_user: "{{ t3bs.www_user }}"
-  template:
-    src: ../templates/htaccess.j2
-    dest: "{{ t3bs.document_root }}/{{ t3bs.project_folder }}/web/.htaccess"
-    mode: 0644
-    force: "{{ t3bs.replace_htaccess }}"
-
 - name: Activate extensions
   become: yes
   become_user: "{{ t3bs.www_user }}"
