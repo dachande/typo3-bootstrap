@@ -8,12 +8,12 @@ This package is using [bento/ubuntu-18.04](https://app.vagrantup.com/bento/boxes
 
 * TYPO3 9.5
 * Apache 2.4
-* MariaDB 10.0
+* MariaDB 10.1
 * PHP 7.2 (customizable)
-* GraphicsMagick 1.3
+* GraphicsMagick 1.4
 * MailHog 1.0.0
-* PhpMyAdmin 4.5.4
-* Node.js 8.x
+* PhpMyAdmin 4.6.6
+* Node.js 10.x
 
 ## PHP Modules
 

@@ -377,6 +377,7 @@ xdebug:
 # Install nodejs
 #
 install_nodejs: "yes"
+nodejs_version: 10.x
 
 #
 # MailHog configuration

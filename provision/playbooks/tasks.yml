@@ -82,7 +82,7 @@
 
 - name: Download nodejs installer
   get_url:
-    url: https://deb.nodesource.com/setup_8.x
+    url: https://deb.nodesource.com/setup_{{ t3bs.nodejs_version}}
     dest: /tmp/nodejs-installer.sh
   when: t3bs.install_nodejs == "yes"
 
