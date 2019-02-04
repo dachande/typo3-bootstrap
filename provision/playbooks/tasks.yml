@@ -183,7 +183,6 @@
     src: ../templates/xdebug.ini.j2
     dest: /etc/php/{{ t3bs.php_version }}/mods-available/xdebug.ini
     mode: 0644
-    force: no
 
 - name: Create xdebug IDE configuration directory
   file:
@@ -249,6 +248,14 @@
     - { regexp: "^export APACHE_RUN_GROUP", line: "export APACHE_RUN_GROUP={{ t3bs.www_group }}"}
   notify: restart apache
 
+- name: Fix apache configuration to prevent it from crashing after provisioning
+  lineinfile:
+    dest: /etc/apache2/apache2.conf
+    insertafter: "^#Mutex file"
+    line: "Mutex posixsem"
+    state: present
+  notify: restart apache
+
 - name: Create Webroot
   file:
     path: "{{ t3bs.document_root }}"
@@ -262,6 +269,31 @@
     src: "{{ t3bs.document_root }}"
     dest: "{{ t3bs.www_user_home }}/www"
     state: link
+
+- name: Update apache vhost configuration
+  template:
+    src: ../templates/apache.conf.j2
+    dest: /etc/apache2/sites-available/000-default.conf
+    mode: 0644
+  notify: restart apache
+
+- name: Update apache vhost configuration (ssl)
+  template:
+    src: ../templates/apache.conf.ssl.j2
+    dest: /etc/apache2/sites-available/default-ssl.conf
+    mode: 0644
+  notify: restart apache
+  when: t3bs.use_tls == true
+
+- name: Enable apache vhost configuration (ssl)
+  command: a2ensite default-ssl
+  notify: restart apache
+  when: t3bs.use_tls == true
+
+- name: Enable apache modules
+  command: a2enmod {{ item }}
+  with_items: "{{ t3bs.apache_modules }}"
+  notify: restart apache
 
 - name: Purge project folder contents
   file:
@@ -407,7 +439,7 @@
 - name: Run TYPO3 setup routine
   become: yes
   become_user: "{{ t3bs.www_user }}"
-  shell: vendor/bin/typo3cms install:setup --force --no-interaction --skip-extension-setup --use-existing-database --database-user-name '{{ t3bs.db_user }}' --database-user-password '{{ t3bs.db_pass }}' --database-host-name '{{ t3bs.db_host }}' --database-name '{{ t3bs.db_name }}' --admin-user-name '{{ t3bs.typo3_admin_user }}' --admin-password '{{ t3bs.typo3_admin_pass}}' --site-name '{{ t3bs.typo3_site_name}}'
+  shell: vendor/bin/typo3cms install:setup --force --no-interaction --skip-extension-setup --web-server-config=apache --use-existing-database --database-user-name '{{ t3bs.db_user }}' --database-user-password '{{ t3bs.db_pass }}' --database-host-name '{{ t3bs.db_host }}' --database-name '{{ t3bs.db_name }}' --admin-user-name '{{ t3bs.typo3_admin_user }}' --admin-password '{{ t3bs.typo3_admin_pass}}' --site-name '{{ t3bs.typo3_site_name}}'
   args:
     chdir: "{{ t3bs.document_root}}/{{ t3bs.project_folder}}"
 
@@ -418,15 +450,6 @@
     src: ../templates/robots.txt.j2
     dest: "{{ t3bs.document_root}}/{{ t3bs.project_folder }}/web/robots.txt"
     mode: 0644
-
-- name: Install default htaccess
-  become: yes
-  become_user: "{{ t3bs.www_user }}"
-  template:
-    src: ../templates/htaccess.j2
-    dest: "{{ t3bs.document_root }}/{{ t3bs.project_folder }}/web/.htaccess"
-    mode: 0644
-    force: "{{ t3bs.replace_htaccess }}"
 
 - name: Activate extensions
   become: yes
@@ -442,26 +465,25 @@
   args:
     chdir: "{{ t3bs.document_root}}/{{ t3bs.project_folder}}"
 
-- name: Download extension translations
+- name: Enable additional languages
   become: yes
   become_user: "{{ t3bs.www_user }}"
-  shell: vendor/bin/typo3cms language:update --locales-to-update '{{ item }}'
+  shell: vendor/bin/typo3cms configuration:set EXTCONF/lang/availableLanguages/{{ item.0 }} {{ item.1 }}
   args:
     chdir: "{{ t3bs.document_root}}/{{ t3bs.project_folder}}"
-  with_items: "{{ t3bs.typo3_translations }}"
+  with_indexed_items: "{{ t3bs.typo3_translations }}"
 
-- name: Enable languages
+- name: Download translations for enabled languages
   become: yes
   become_user: "{{ t3bs.www_user }}"
-  shell: vendor/bin/typo3cms configuration:set --path EXTCONF/lang/availableLanguages/{{ item.0 }} --value '{{ item.1 }}'
+  shell: vendor/bin/typo3cms language:update {{ t3bs.typo3_translations|join(' ') }}
   args:
     chdir: "{{ t3bs.document_root}}/{{ t3bs.project_folder}}"
-  with_indexed_items: "{{ t3bs.typo3_languages }}"
 
 - name: Set up mail transport (sendmail)
   become: yes
   become_user: "{{ t3bs.www_user }}"
-  shell: vendor/bin/typo3cms configuration:set --path MAIL/{{ item.key }} --value '{{ item.value }}'
+  shell: vendor/bin/typo3cms configuration:set MAIL/{{ item.key }} '{{ item.value }}'
   args:
     chdir: "{{ t3bs.document_root}}/{{ t3bs.project_folder}}"
   with_items:
@@ -472,7 +494,7 @@
 - name: Use mailhog for sendmail transport
   become: yes
   become_user: "{{ t3bs.www_user }}"
-  shell: vendor/bin/typo3cms configuration:set --path MAIL/transport_sendmail_command --value '{{ t3bs.mailhog_folder }}/mhsendmail -t --smtp-addr {{ t3bs.mailhog_smtp }}'
+  shell: vendor/bin/typo3cms configuration:set MAIL/transport_sendmail_command '{{ t3bs.mailhog_folder }}/mhsendmail -t --smtp-addr {{ t3bs.mailhog_smtp }}'
   args:
     chdir: "{{ t3bs.document_root}}/{{ t3bs.project_folder}}"
   when:
@@ -482,7 +504,7 @@
 - name: Set up mail transport (smtp)
   become: yes
   become_user: "{{ t3bs.www_user }}"
-  shell: vendor/bin/typo3cms configuration:set --path MAIL/{{ item.key }} --value '{{ item.value }}'
+  shell: vendor/bin/typo3cms configuration:set MAIL/{{ item.key }} '{{ item.value }}'
   args:
     chdir: "{{ t3bs.document_root}}/{{ t3bs.project_folder}}"
   with_items:
@@ -496,36 +518,11 @@
 - name: Add custom TYPO3 configuration
   become: yes
   become_user: "{{ t3bs.www_user }}"
-  shell: vendor/bin/typo3cms configuration:set --path {{ item.key }} --value {{ item.value }}
+  shell: vendor/bin/typo3cms configuration:set {{ item.key }} {{ item.value }}
   args:
     chdir: "{{ t3bs.document_root}}/{{ t3bs.project_folder}}"
   with_items: "{{ t3bs.typo3_configuration }}"
   when: t3bs.typo3_configuration
-
-- name: Update apache vhost configuration
-  template:
-    src: ../templates/apache.conf.j2
-    dest: /etc/apache2/sites-available/000-default.conf
-    mode: 0644
-  notify: restart apache
-
-- name: Update apache vhost configuration (ssl)
-  template:
-    src: ../templates/apache.conf.ssl.j2
-    dest: /etc/apache2/sites-available/default-ssl.conf
-    mode: 0644
-  notify: restart apache
-  when: t3bs.use_tls == true
-
-- name: Enable apache vhost configuration (ssl)
-  command: a2ensite default-ssl
-  notify: restart apache
-  when: t3bs.use_tls == true
-
-- name: Enable apache modules
-  command: a2enmod {{ item }}
-  with_items: "{{ t3bs.apache_modules }}"
-  notify: restart apache
 
 - name: Remove default html folder
   file:

@@ -11,7 +11,7 @@
 # predefined ansible tasks are optimized for Ubuntu and may fail when using a
 # base box other than a Ubuntu box.
 #
-box: bento/ubuntu-16.04
+box: bento/ubuntu-18.04
 server_admin: d.schultheis@kabel-salat.net
 
 #
@@ -72,7 +72,7 @@ use_tls: true
 # Do not attempt to install TYPO3 below 8.7 as it will most likely fail as TYPO3 7.6 support
 # has been dropped.
 #
-typo3_version: ^8.7
+typo3_version: ^9.5
 typo3_site_name: TYPO3 Bootstrap
 
 #
@@ -115,6 +115,9 @@ db_pass: typo3
 # you can also specify additional core extensions here that will be installed and
 # activated on provisioning.
 #
+# Core extensions not listed here are installed automatically as a basic requirement
+# for a minimal system.
+#
 # If you want to install additional core extensions later you'll have to add them to this
 # list and additionally require them by running composer with the following command inside
 # the virtual machine in the folder /var/www/your-typo3-project-folder:
@@ -126,24 +129,35 @@ db_pass: typo3
 #
 typo3_extensions:
   - about
+  # - adminpanel
   - belog
   - beuser
+  # - feedit
+  - filelist
+  - filemetadata
   # - fluid_styled_content
-  - form
-  - func
-  - impexp
+  # - form
+  # - impexp
+  # - indexed_search
   - info
-  - info_pagetsconfig
-  - lowlevel
+  # - linkvalidator
+  # - lowlevel
+  # - opendocs
+  - recordlist
   - recycler
-  - reports
+  - redirects
+  # - reports
   - rsaauth
   - rte_ckeditor
+  - seo
   - setup
+  # - sys_action
+  # - sys_note
   - t3editor
+  # - taskcenter
   - tstemplate
-  - wizard_crpages
-  - wizard_sortpages
+  - viewpage
+  # - workspaces
 
 #
 # TYPO3 community extensions to be installed/activated
@@ -163,12 +177,10 @@ typo3_extensions:
 # to install them.
 #
 typo3_community_extensions:
-  - {composer_package: dmitryd/typo3-realurl, extension_key: realurl, constraint: ~}
-  - {composer_package: typo3/cms-introduction, extension_key: introduction, constraint: ^3.0}
+  - {composer_package: typo3/cms-introduction, extension_key: introduction, constraint: ~}
   # - {composer_package: arminvieweg/dce, extension_key: dce, constraint: ~}
-  # - {composer_package: clickstorm/go_maps_ext, extension_key: go_maps_ext, constraint: ~}
-  # - {composer_package: b13/seo_basics, extension_key: seo_basics, constraint: ~}
   # - {composer_package: bk2k/bootstrap-package, extension_key: bootstrap_package, constraint: ~}
+  # - {composer_package: clickstorm/go_maps_ext, extension_key: go_maps_ext, constraint: ~}
   # - {composer_package: fluidtypo3/vhs, extension_key: vhs, constraint: ~}
   # - {composer_package: friendsoftypo3/extension-builder, extension_key: extension_builder, constraint: ~}
   # - {composer_package: friendsoftypo3/frontend-editing, extension_key: frontend_editing, constraint: ~}
@@ -229,15 +241,6 @@ typo3_mail_use_mailhog: true
 # These translations will be downloaded and put in the typo3conf/l10n directory.
 #
 typo3_translations:
-  - en
-  - de
-
-#
-# Enables languages
-#
-# Notice: Language 'en' is enabled by default and doesn't need to be enabled here.
-#
-typo3_languages:
   - de
 
 #
@@ -253,8 +256,6 @@ typo3_configuration:
   - {key: FE/debug, value: 1}
   - {key: SYS/devIPmask, value: \*}
   - {key: SYS/displayErrors, value: 1}
-  - {key: SYS/enableDeprecationLog, value: file}
-  - {key: SYS/sqlDebug, value: 1}
   - {key: SYS/systemLogLevel, value: 0}
   - {key: SYS/exceptionalErrors, value: 28674}
 
@@ -309,7 +310,7 @@ composer_packages: []
 #
 # PHP version to use.
 #
-php_version: "7.1"
+php_version: "7.2"
 
 #
 # PHP settings
@@ -410,7 +411,6 @@ requirements:
   - php#PHPVER#-gd
   - php#PHPVER#-intl
   - php#PHPVER#-mbstring
-  - php#PHPVER#-mcrypt
   - php#PHPVER#-mysql
   - php#PHPVER#-soap
   - php#PHPVER#-xml
