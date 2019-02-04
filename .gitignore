@@ -1,7 +1,24 @@
+########################
+# TYPO3 CMS
+# global ignore file
+########################
+#
+# Don't ignore .rej and .orig as we want to see/clean files after conflict resolution.
+#
+# For local exclude patterns please edit .git/info/exclude.
+#
+########################
+
+#
+# Ignore temporary files (left by editors and OS)
 *~
 *.bak
 *.swp
 .DS_Store
+/site/html/*
+
+#
+# Ignore by common IDEs used directories/files
 nbproject
 *.idea
 *.project
@@ -9,19 +26,52 @@ nbproject
 .settings
 .TemporaryItems
 .webprj
-.vagrant
 .vscode
-provision/playbook.retry
-site/html
-LocalConfiguration.php
-PackageStates.php
+
+#
+# Temporary files and folders
+/provision/playbook.retry
+.vagrant
+.cache
+.php_cs.cache
+.sass-cache
+.session
+*.log
+site/**/var/*
+
+#
+# Ignore build stuff
+.ddev
+site/**/bower_components/*
+site/**/node_modules/*
+
+#
+# TypeScript stuff
+.baseDir.ts
+.tscache
+
+#
+# Ignore composer stuff
+site/**/vendor/*
+site/**/web/index.php
+site/**/web/typo3/*
+
+#
+# Ignore common TYPO3 CMS files/directories
+site/**/web/typo3temp/*
+site/**/web/typo3conf/*
+!site/**/web/typo3conf/AdditionalConfiguration.php
+site/**/web/fileadmin/*
+site/**/web/uploads/*
 ENABLE_INSTALL_TOOL
 
-site/**/typo3conf/ext/*
-site/**/typo3conf/l10n/
-site/**/typo3conf/deprecation*
-site/**/fileadmin/_processed_/
-site/**/fileadmin/_temp_/
+#
+# root .htaccess/robots.txt file
+site/**/web/.htaccess
+site/**/web/robots.txt
+
+!site/**/web/typo3conf/ext
+site/**/web/typo3conf/ext/*
 
 # All extensions in typo3conf/ext are ignored by default
 # as they are managed by composer and should not be in VCS.
