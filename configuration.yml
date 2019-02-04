@@ -115,6 +115,9 @@ db_pass: typo3
 # you can also specify additional core extensions here that will be installed and
 # activated on provisioning.
 #
+# Core extensions not listed here are installed automatically as a basic requirement
+# for a minimal system.
+#
 # If you want to install additional core extensions later you'll have to add them to this
 # list and additionally require them by running composer with the following command inside
 # the virtual machine in the folder /var/www/your-typo3-project-folder:
@@ -124,26 +127,37 @@ db_pass: typo3
 # The extension will automatically be activated after the composer command has finished
 # installing the extension.
 #
-typo3_extensions: []
-  # - about
-  # - belog
-  # - beuser
+typo3_extensions:
+  - about
+  # - adminpanel
+  - belog
+  - beuser
+  # - feedit
+  - filelist
+  - filemetadata
   # - fluid_styled_content
   # - form
-  # - func
   # - impexp
-  # - info
-  # - info_pagetsconfig
+  # - indexed_search
+  - info
+  # - linkvalidator
   # - lowlevel
-  # - recycler
+  # - opendocs
+  - recordlist
+  - recycler
+  - redirects
   # - reports
-  # - rsaauth
-  # - rte_ckeditor
-  # - setup
-  # - t3editor
-  # - tstemplate
-  # - wizard_crpages
-  # - wizard_sortpages
+  - rsaauth
+  - rte_ckeditor
+  - seo
+  - setup
+  # - sys_action
+  # - sys_note
+  - t3editor
+  # - taskcenter
+  - tstemplate
+  - viewpage
+  # - workspaces
 
 #
 # TYPO3 community extensions to be installed/activated
