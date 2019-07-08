@@ -4,7 +4,7 @@ Fully automated provisioning of a virtual machine for TYPO3 website development 
 
 ## Contents
 
-This package is using [bento/ubuntu-18.04](https://app.vagrantup.com/bento/boxes/ubuntu-18.04) as its Vagrant base box. The provisioned virtual machine will have the following features installed:
+This package is using [ubuntu/bionic64](https://app.vagrantup.com/ubuntu/boxes/bionic64) as its Vagrant base box. The provisioned virtual machine will have the following features installed:
 
 * TYPO3 9.5
 * Apache 2.4
@@ -31,7 +31,7 @@ The following additional PHP modules are installed
 
 ## Requirements
 
-* A Linux, MacOS or Windows machine
+* A Linux-, MacOS- or Windows machine
 * Oracle VirtualBox
 * Vagrant >= 2.1.2
 
