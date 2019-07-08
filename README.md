@@ -31,7 +31,7 @@ The following additional PHP modules are installed
 
 ## Requirements
 
-* A Linux or MacOS machine (not tested on Windows)
+* A Linux MacOS or Windows machine
 * Oracle VirtualBox
 * Vagrant >= 2.1.2
 * Ansible >= 2.0
