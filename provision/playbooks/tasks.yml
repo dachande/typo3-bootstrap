@@ -249,6 +249,14 @@
     - { regexp: "^export APACHE_RUN_GROUP", line: "export APACHE_RUN_GROUP={{ t3bs.www_group }}"}
   notify: restart apache
 
+- name: Fix apache configuration to prevent it from crashing after provisioning
+  lineinfile:
+    dest: /etc/apache2/apache2.conf
+    insertafter: "^#Mutex file"
+    line: "Mutex posixsem"
+    state: present
+  notify: restart apache
+
 - name: Create Webroot
   file:
     path: "{{ t3bs.document_root }}"
