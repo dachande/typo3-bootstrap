@@ -442,12 +442,21 @@
     dest: "{{ t3bs.document_root}}/{{ t3bs.project_folder }}/web/robots.txt"
     mode: 0644
 
-- name: Activate extensions
+- name: Activate extensions (with excludes)
   become: yes
   become_user: "{{ t3bs.www_user }}"
   shell: vendor/bin/typo3cms install:generatepackagestates --excluded-extensions {{ t3bs.typo3_extension_exclude|join(',') }}
   args:
     chdir: "{{ t3bs.document_root}}/{{ t3bs.project_folder}}"
+  when: t3bs.typo3_extension_exclude is defined and t3bs.typo3_extension_exclude|length>0
+
+- name: Activate extensions (no excludes)
+  become: yes
+  become_user: "{{ t3bs.www_user }}"
+  shell: vendor/bin/typo3cms install:generatepackagestates }}
+  args:
+    chdir: "{{ t3bs.document_root}}/{{ t3bs.project_folder}}"
+  when: t3bs.typo3_extension_exclude is undefined or t3bs.typo3_extension_exclude|length<=0
 
 - name: Setup active extensions
   become: yes
