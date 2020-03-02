@@ -453,7 +453,7 @@
 - name: Activate extensions (no excludes)
   become: yes
   become_user: "{{ t3bs.www_user }}"
-  shell: vendor/bin/typo3cms install:generatepackagestates }}
+  shell: vendor/bin/typo3cms install:generatepackagestates
   args:
     chdir: "{{ t3bs.document_root}}/{{ t3bs.project_folder}}"
   when: t3bs.typo3_extension_exclude is undefined or t3bs.typo3_extension_exclude|length<=0
