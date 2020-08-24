@@ -108,6 +108,7 @@
   get_url:
     url: https://github.com/mailhog/MailHog/releases/download/{{ t3bs.mailhog_version }}/MailHog_linux_amd64
     dest: /tmp/MailHog_linux_amd64_{{ t3bs.mailhog_version }}
+    mode: 600
 
 - name: Install MailHog
   copy:
