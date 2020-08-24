@@ -6,14 +6,14 @@ Fully automated provisioning of a virtual machine for TYPO3 website development 
 
 This package is using [ubuntu/bionic64](https://app.vagrantup.com/ubuntu/boxes/bionic64) as its Vagrant base box. The provisioned virtual machine will have the following features installed:
 
-* TYPO3 9.5
+* TYPO3 10.4
 * Apache 2.4
 * MariaDB 10.1
-* PHP 7.2 (customizable)
+* PHP 7.4 (customizable)
 * GraphicsMagick 1.4
 * MailHog 1.0.0
 * PhpMyAdmin 4.6.6
-* Node.js 10.x
+* Node.js 12.x
 
 ## PHP Modules
 

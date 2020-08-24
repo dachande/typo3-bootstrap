@@ -72,7 +72,7 @@ use_tls: true
 # Do not attempt to install TYPO3 below 8.7 as it will most likely fail as TYPO3 7.6 support
 # has been dropped.
 #
-typo3_version: ^9.5
+typo3_version: ^10.4
 typo3_site_name: TYPO3 Bootstrap
 
 #
@@ -141,7 +141,7 @@ typo3_extensions:
   # - indexed_search
   - info
   # - linkvalidator
-  # - lowlevel
+  - lowlevel
   # - opendocs
   - recordlist
   - recycler
@@ -177,7 +177,7 @@ typo3_extensions:
 # to install them.
 #
 typo3_community_extensions:
-  - {composer_package: typo3/cms-introduction, extension_key: introduction, constraint: 4.0.1}
+  - {composer_package: typo3/cms-introduction, extension_key: introduction, constraint: ~}
   # - {composer_package: arminvieweg/dce, extension_key: dce, constraint: ~}
   # - {composer_package: bk2k/bootstrap-package, extension_key: bootstrap_package, constraint: ~}
   # - {composer_package: clickstorm/go_maps_ext, extension_key: go_maps_ext, constraint: ~}
@@ -310,7 +310,7 @@ composer_packages: []
 #
 # PHP version to use.
 #
-php_version: "7.2"
+php_version: "7.4"
 
 #
 # PHP settings
@@ -377,7 +377,7 @@ xdebug:
 # Install nodejs
 #
 install_nodejs: "yes"
-nodejs_version: 10.x
+nodejs_version: 12.x
 
 #
 # MailHog configuration
