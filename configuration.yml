@@ -255,7 +255,6 @@ typo3_configuration:
   - {key: FE/debug, value: 1}
   - {key: SYS/devIPmask, value: \*}
   - {key: SYS/displayErrors, value: 1}
-  - {key: SYS/systemLogLevel, value: 0}
   - {key: SYS/exceptionalErrors, value: 28674}
 
 #
