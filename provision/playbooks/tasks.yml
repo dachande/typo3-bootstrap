@@ -3,7 +3,7 @@
   apt:
     name:
       - aptitude
-      - python-mysqldb
+      - python3-mysqldb
     update_cache: yes
     state: present
 
@@ -29,6 +29,7 @@
 - name: Add PHP PPA
   apt_repository:
     repo: 'ppa:ondrej/php'
+    mode: 0644
 
 - name: Install required OS packages
   apt: name={{ t3bs.requirements | regex_replace('#PHPVER#', t3bs.php_version) }} state=present
@@ -379,14 +380,34 @@
 - name: Install TYPO3 project (this may take a while)
   become: yes
   become_user: "{{ t3bs.www_user }}"
+  shell: "{{ t3bs.composer_bin_path }}/{{ t3bs.composer_bin }} install --prefer-dist --no-plugins --no-scripts"
+  args:
+    chdir: "{{ t3bs.document_root }}/{{ t3bs.project_folder }}"
+
+- name: Run composer plugins and scripts
+  become: yes
+  become_user: "{{ t3bs.www_user }}"
   shell: "{{ t3bs.composer_bin_path }}/{{ t3bs.composer_bin }} install --prefer-dist"
   args:
     chdir: "{{ t3bs.document_root }}/{{ t3bs.project_folder }}"
 
 - name: Set mysql root password
+  mysql_user:
+    name: root
+    host: localhost
+    password: "{{ t3bs.db_root_password }}"
+    state: present
+  notify: flush privileges
+
+- name: Create mysql credentials file
+  template:
+    src: ../templates/.my.cnf.j2
+    dest: "/root/.my.cnf"
+    mode: 0600
+
+- name: Set mysql root password
   mysql_user: name=root host={{ item }} password={{ t3bs.db_root_password }} state=present
   with_items:
-    - localhost
     - 127.0.0.1
     - ::1
   notify: flush privileges

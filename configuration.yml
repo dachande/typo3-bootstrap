@@ -11,7 +11,7 @@
 # predefined ansible tasks are optimized for Ubuntu and may fail when using a
 # base box other than a Ubuntu box.
 #
-box: ubuntu/bionic64
+box: ubuntu/focal64
 server_admin: d.schultheis@kabel-salat.net
 
 #
