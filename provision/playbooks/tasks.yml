@@ -84,6 +84,7 @@
   get_url:
     url: https://deb.nodesource.com/setup_{{ t3bs.nodejs_version}}
     dest: /tmp/nodejs-installer.sh
+    mode: 0755
   when: t3bs.install_nodejs == "yes"
 
 - name: Execute nodejs installer
