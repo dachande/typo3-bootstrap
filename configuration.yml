@@ -256,6 +256,7 @@ typo3_configuration:
   - {key: SYS/devIPmask, value: \*}
   - {key: SYS/displayErrors, value: 1}
   - {key: SYS/exceptionalErrors, value: 28674}
+  - {key: LOG/TYPO3/CMS/deprecations/writerConfiguration/notice/TYPO3\\CMS\\Core\\Log\\Writer\\FileWriter/disabled, value: false}
 
 #
 # System locales to install
