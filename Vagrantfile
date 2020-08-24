@@ -59,6 +59,8 @@ Vagrant.configure(2) do |config|
     end
     vb.customize ['modifyvm', :id, '--natdnsproxy1', 'on']
     vb.customize ['modifyvm', :id, '--natdnshostresolver1', 'on']
+    vb.customize ['modifyvm', :id, '--uart1', '0x3F8', '4']
+    vb.customize ['modifyvm', :id, '--uartmode1', 'file', File::NULL]
   end
 
   config.vm.provision "ansible_local" do |ansible|
