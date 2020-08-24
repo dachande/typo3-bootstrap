@@ -147,7 +147,6 @@ typo3_extensions:
   - recycler
   - redirects
   # - reports
-  - rsaauth
   - rte_ckeditor
   - seo
   - setup
