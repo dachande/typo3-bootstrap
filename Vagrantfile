@@ -67,6 +67,7 @@ Vagrant.configure(2) do |config|
     ansible.extra_vars = {
       t3bs: _conf
     }
+    ansible.install_mode = "pip"
     ansible.playbook = "provision/playbook.yml"
   end
 
