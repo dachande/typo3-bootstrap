@@ -1,9 +1,0 @@
----
-- hosts: all
-  become: yes
-
-  handlers:
-    - import_tasks: handlers.yml
-
-  tasks:
-    - import_tasks: tasks.yml

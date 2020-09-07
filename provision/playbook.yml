@@ -1,2 +1,7 @@
 ---
-- import_playbook: playbooks/setup.yml
+- hosts: all
+  become: yes
+
+  tasks:
+    - include_role:
+        name: project_setup
