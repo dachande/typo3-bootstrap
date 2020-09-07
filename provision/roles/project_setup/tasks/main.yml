@@ -401,7 +401,7 @@
 
 - name: Create mysql credentials file
   template:
-    src: ../templates/.my.cnf.j2
+    src: ../templates/my.cnf.j2
     dest: "/root/.my.cnf"
     mode: 0600
 
